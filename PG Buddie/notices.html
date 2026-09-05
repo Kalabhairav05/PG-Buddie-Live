@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Owner Notices | PG-Buddie</title>
+<link rel="stylesheet" href="ownerhome.css" />
+<style>
+@keyframes fadeInUp { 0%{opacity:0;transform:translateY(20px);} 100%{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn { 0%{opacity:0;} 100%{opacity:1;} }
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg,#89f7fe,#66a6ff);
+  margin: 0;
+  color: #333;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(120deg,#89f7fe,#66a6ff);
+  color: #fff;
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+header a { color:#fff; text-decoration:none; margin-left:16px; font-weight:600; }
+header a:hover { text-decoration:underline; }
+
+h1 { text-align:center; margin:20px 0; color:#fff; animation:fadeInUp 0.7s ease-out; }
+
+section {
+  max-width:900px;
+  margin:0 auto;
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 12px 28px rgba(0,0,0,0.1);
+  animation:fadeInUp 0.7s ease-out;
+}
+
+.notice {
+  background:#f1f3f8;
+  border-radius:10px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  transition: all 0.3s ease;
+  box-shadow:0 3px 10px rgba(0,0,0,0.05);
+}
+.notice:hover { transform:translateY(-2px); }
+
+.notice strong {
+  display:block;
+  color:#0077b6;
+  font-size:1rem;
+  margin-bottom:4px;
+}
+.notice small {
+  color:#666;
+  font-size:0.85rem;
+}
+.notice-actions {
+  text-align:right;
+  margin-top:8px;
+}
+.action-btn {
+  background:#66a6ff;
+  border:none;
+  color:#fff;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:600;
+  transition:background 0.2s ease;
+  margin-left:6px;
+}
+.action-btn:hover { background:#0077b6; }
+
+.post-section {
+  display:flex;
+  flex-direction:column;
+  margin-top:18px;
+}
+textarea {
+  width:100%;
+  resize:none;
+  min-height:60px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  padding:10px;
+  font-family:inherit;
+  font-size:1rem;
+}
+.post-actions {
+  margin-top:10px;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+.clear-all {
+  background:#ff5555;
+}
+.clear-all:hover {
+  background:#cc0000;
+}
+.back-btn {
+  display:inline-block;
+  margin-top:20px;
+  padding:10px 16px;
+  background:#0077b6;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:600;
+}
+.back-btn:hover { opacity:0.9; }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">PG-Buddie</div>
+  <nav><a href="ownerdashboard.html">Dashboard</a>
+    <a href="complaints.html">Complaints</a>
+        <a href="ownerprofile.html">Profile</a>
+            <a href="login.html">Logout</a>
+
+
+
+</nav>
+
+</header>
+
+<h1>📢 Manage Notices</h1>
+
+<section>
+  <div id="noticeList"></div>
+
+  <div class="post-section">
+    <textarea id="noticeInput" placeholder="Write a new notice..."></textarea>
+    <div class="post-actions">
+      <button class="action-btn" id="postBtn">Post Notice</button>
+      <button class="action-btn clear-all" id="clearAllBtn">Clear All</button>
+    </div>
+  </div>
+
+  <a href="ownerdashboard.html" class="back-btn">← Back to Dashboard</a>
+</section>
+
+<script>
+// --- Mock notices (same as student version) ---
+let notices = [
+  { text: "Water supply will be unavailable from 10 AM - 12 PM tomorrow for maintenance.", date: "2025-10-01" },
+  { text: "Mess services will be closed this Sunday for Deep Cleaning.", date: "2025-10-03" },
+  { text: "All residents are requested to submit ID proofs by Friday at the reception.", date: "2025-10-05" },
+  {  text: "Water supply will be shut down tomorrow 8–10 AM.", date:"2025-10-03" },
+    { text: "Sunday will have special menu.", date: "2025-10-08" },
+    { text: "Next month’s rent due by 25th.", date: "2025-10-07" },
+    { text: "No overnight guests 11pm–6am.", date: "2025-10-06" },
+    { text: "Inspection Friday 2–4 PM.", date: "2025-10-03"}
+  ];
+
+
+const noticeList = document.getElementById("noticeList");
+const noticeInput = document.getElementById("noticeInput");
+const postBtn = document.getElementById("postBtn");
+const clearAllBtn = document.getElementById("clearAllBtn");
+
+function renderNotices() {
+  noticeList.innerHTML = "";
+  if (notices.length === 0) {
+    noticeList.innerHTML = `<p style="text-align:center;color:#777;">No notices yet.</p>`;
+    return;
+  }
+
+  notices.forEach((notice, index) => {
+    const div = document.createElement("div");
+    div.className = "notice";
+    div.innerHTML = `
+      <strong>${notice.text}</strong>
+      <small>📅 Posted on: ${notice.date}</small>
+      <div class="notice-actions">
+        <button class="action-btn clear-one" data-index="${index}">Clear</button>
+      </div>
+    `;
+    noticeList.appendChild(div);
+  });
+
+  // Attach listeners for each clear button
+  document.querySelectorAll(".clear-one").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const idx = e.target.getAttribute("data-index");
+      notices.splice(idx, 1);
+      renderNotices();
+    });
+  });
+}
+
+// Post new notice
+postBtn.addEventListener("click", () => {
+  const text = noticeInput.value.trim();
+  if (!text) {
+    alert("Please write something before posting!");
+    return;
+  }
+  const date = new Date().toISOString().split("T")[0];
+  notices.unshift({ text, date });
+  noticeInput.value = "";
+  renderNotices();
+});
+
+// Clear all
+clearAllBtn.addEventListener("click", () => {
+  if (confirm("Are you sure you want to clear all notices?")) {
+    notices = [];
+    renderNotices();
+  }
+});
+
+renderNotices();
+</script>
+</body>
+</html>

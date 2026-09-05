@@ -1,0 +1,156 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Body */
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  overflow: hidden; /* prevents scrollbar flicker */
+}
+
+/* Login Container */
+.login-container {
+  position: relative;
+  width: 350px;
+  padding: 40px;
+  border-radius: 15px;
+  background: #fff;
+  z-index: 2;
+  box-shadow: 
+    0 10px 20px rgba(0,0,0,0.2),
+    0 20px 40px rgba(0,0,0,0.2),
+    0 30px 60px rgba(0,0,0,0.15);
+
+  /* Slide-up animation */
+  animation: slideUpFromBottom 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+  will-change: transform, opacity;
+
+  /* Smooth hover transition */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover lift effect */
+.login-container:hover {
+  transform: translateY(-10px); /* lift relative to final position */
+  box-shadow: 
+    0 15px 35px rgba(0,0,0,0.2),
+    0 25px 50px rgba(0,0,0,0.15),
+    0 40px 80px rgba(0,0,0,0.1);
+}
+
+/* Role Slider */
+.slider {
+  display: flex;
+  position: relative;
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: 30px;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.option {
+  flex: 1;
+  text-align: center;
+  padding: 12px 0;
+  cursor: pointer;
+  z-index: 2;
+  font-weight: bold;
+  color: #666;
+  transition: color 0.3s;
+}
+
+.option.active {
+  color: #fff;
+}
+
+.indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: #66a6ff;
+  border-radius: 30px;
+  transform: translateX(0%);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+}
+
+/* Inputs */
+form input {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 10px 0;
+  border-radius: 50px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+form input:focus {
+  border: 1px solid #66a6ff;
+  box-shadow: 0 0 8px rgba(102, 166, 255, 0.4);
+}
+
+/* Button */
+form button {
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 50px;
+  background: #66a6ff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+form button:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Signup Link */
+.signup-link {
+  margin-top: 25px;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+.signup-link a {
+  color: #66a6ff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* --- Slide Up Animation --- */
+@keyframes slideUpFromBottom {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  70% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

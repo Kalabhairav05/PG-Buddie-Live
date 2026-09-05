@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PG Finder Login</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== Slide-Up Animation for Entire Form Container ===== */
+.login-container {
+    transform: translateY(100px);
+    opacity: 0;
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+/* Show container on load */
+.login-container.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ===== Keep your original hover effect on form container ===== */
+.login-container:hover {
+    /* Replace this with whatever your original hover styles were */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transform: translateY(-5px);
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <h1 class="app-title">🏠PG-Buddie</h1>
+
+  <div class="background-slider">
+    <div class="bg student-bg"></div>
+    <div class="bg owner-bg"></div>
+    <div class="overlay"></div>
+  </div>
+
+  <div class="slider">
+    <div class="option active" id="studentBtn" data-role="student">Student</div>
+    <div class="option" id="ownerBtn" data-role="owner">Owner</div>
+    <div class="indicator"></div>
+  </div>
+
+  <form id="loginForm">
+    <input type="email" placeholder="Email" required>
+    <input type="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+
+  <p class="signup-link">Don't have an account? <a href="signup.html">Sign Up</a></p>
+</div>
+
+<script>
+// Slide up the entire form container on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('.login-container');
+    setTimeout(() => {
+        container.classList.add('visible');
+    }, 100); // slight delay for smoother effect
+});
+</script>
+
+<script src="login.js"></script>
+</body>
+</html>

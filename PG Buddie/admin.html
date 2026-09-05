@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PG Finder Admin</title>
+<link rel="stylesheet" href="home.css">
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  margin: 0;
+  color: #333;
+}
+
+/* HEADER */
+header {
+  position: sticky;
+  top: 0;
+  background:linear-gradient(120deg, #89f7fe, #66a6ff);
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  z-index: 10;
+}
+header .logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
+nav {
+  display: flex;
+  gap: 18px;
+}
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+nav a.active {
+  
+  border-bottom: 2px solid white;
+  padding-bottom: 3px;
+}
+
+/* MAIN LAYOUT */
+main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px;
+}
+
+/* SEARCH + FILTER */
+.search-bar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  gap: 10px;
+}
+.search-input {
+  width: 50%;
+  min-width: 300px;
+  padding: 12px 16px;
+  border-radius: 25px;
+  border: 2px solid #66a6ff;
+  font-size: 1rem;
+  outline: none;
+  transition: box-shadow 0.2s;
+}
+.search-input:focus {
+  box-shadow: 0 0 8px rgba(102,166,255,0.4);
+}
+.filter-btn {
+  background: #66a6ff;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  position: relative;
+}
+.filter-btn:hover {
+  opacity: 0.9;
+}
+
+/* DROPDOWN MENU */
+.filter-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  display: none;
+  min-width: 200px;
+  overflow: hidden;
+  z-index: 100;
+}
+.filter-dropdown.active {
+  display: block;
+}
+.filter-option {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 0.95rem;
+}
+.filter-option:last-child {
+  border-bottom: none;
+}
+.filter-option:hover {
+  background: #f2f6ff;
+  color: #66a6ff;
+}
+
+/* SECTIONS */
+section {
+  display: none;
+}
+section.active {
+  display: block;
+}
+.section-title {
+  text-align: center;
+  color: #1b3558;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.card h3 {
+  color: #222;
+}
+.card .highlight {
+  color: #66a6ff;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">PG Buddie Admin</div>
+  <nav>
+    <a id="navReports" class="active">Reports</a>
+    <a id="navTransactions">Transactions</a>
+    <a id="navStats">Stats</a>
+    <a id="navNotices">Notices</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- SEARCH BAR + FILTER -->
+  <div class="search-bar-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search PG by name...">
+    <div style="position: relative;">
+      <button class="filter-btn" id="filterBtn">Filter ▼</button>
+      <div class="filter-dropdown" id="filterDropdown">
+        <div class="filter-option">Location</div>
+        <div class="filter-option">Rent Range</div>
+        <div class="filter-option">Occupancy Status</div>
+        <div class="filter-option">Owner Name</div>
+        <div class="filter-option">Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REPORTS SECTION -->
+  <section id="reportsSection" class="active">
+    <h2 class="section-title">Reports Overview</h2>
+    <div class="card-container">
+      <div class="card"><h3>Reported PGs</h3><div class="highlight">5</div></div>
+      <div class="card"><h3>Reported Communities</h3><div class="highlight">3</div></div>
+      <div class="card"><h3>Reported Students</h3><div class="highlight">2</div></div>
+    </div>
+  </section>
+
+  <!-- TRANSACTIONS -->
+  <section id="transactionsSection">
+    <h2 class="section-title">Transactions</h2>
+    <div class="card-container">
+      <div class="card"><h3>Total Payments</h3><div class="highlight">₹7,50,000</div></div>
+      <div class="card"><h3>Refunds</h3><div class="highlight">₹2,500</div></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section id="statsSection">
+    <h2 class="section-title">Stats</h2>
+    <div class="card-container">
+      <div class="card"><h3>Active PGs</h3><div class="highlight">12</div></div>
+      <div class="card"><h3>Inactive PGs</h3><div class="highlight">4</div></div>
+      <div class="card"><h3>Total Users</h3><div class="highlight">78</div></div>
+      <div class="card"><h3>Total Residents</h3><div class="highlight">64</div></div>
+    </div>
+  </section>
+
+  <!-- NOTICES -->
+  <section id="noticesSection">
+    <h2 class="section-title">Post Notices</h2>
+    <div class="card">
+      <p><strong>Post a new notice:</strong></p>
+      <input type="text" id="noticeTitle" placeholder="Notice title" style="width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px;">
+      <br>
+      <textarea id="noticeBody" placeholder="Write your notice here..." style="width: 80%; height: 100px; padding: 10px; border-radius: 8px; border: 1px solid #ccc;"></textarea>
+      <br>
+      <button class="filter-btn" id="postNoticeBtn">Post Notice</button>
+      <p id="noticeStatus" style="color:green; font-weight:600; display:none; margin-top:10px;">Notice posted!</p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+// ======= Fake backend data =======
+const fakePGs = [
+  { name: "Sunrise PG", location: "Koramangala", rent: "₹8,000", owner: "Ravi Kumar", status: "Active", rating: 4.3 },
+  { name: "BlueHeaven PG", location: "HSR Layout", rent: "₹9,500", owner: "Priya Sharma", status: "Active", rating: 4.7 },
+  { name: "GreenStay PG", location: "BTM 2nd Stage", rent: "₹7,000", owner: "Amit Patel", status: "Inactive", rating: 3.9 },
+  { name: "UrbanNest PG", location: "Indiranagar", rent: "₹11,000", owner: "Sanjana Rao", status: "Active", rating: 4.5 },
+];
+
+const fakeReports = {
+  pgReports: [
+    { pg: "Sunrise PG", issue: "Unsanitary rooms", by: "Student: Riya Sen", date: "2025-10-12" },
+    { pg: "GreenStay PG", issue: "False amenities listed", by: "Student: Krish Yadav", date: "2025-10-14" }
+  ],
+  communityReports: [
+    { post: "Using abusive language", by: "Resident: Meena", date: "2025-10-09" }
+  ],
+  studentReports: [
+    { student: "Rahul Sharma", reason: "Harassment report by owner of UrbanNest", date: "2025-10-10" }
+  ]
+};
+
+const fakeTransactions = [
+  { id: "#TX1023", pg: "Sunrise PG", user: "Ananya", amount: "₹8,000", date: "2025-10-05" },
+  { id: "#TX1024", pg: "BlueHeaven PG", user: "Harish", amount: "₹9,500", date: "2025-10-07" },
+  { id: "#TX1025", pg: "UrbanNest PG", user: "Nidhi", amount: "₹11,000", date: "2025-10-12" }
+];
+
+const fakeUsers = [
+  { name: "Riya Sen", type: "Resident", email: "riya@gmail.com" },
+  { name: "Harish Mehta", type: "Resident", email: "harish@gmail.com" },
+  { name: "Priya Sharma", type: "Owner", email: "priya@gmail.com" },
+  { name: "Sanjana Rao", type: "Owner", email: "sanjana@gmail.com" },
+  { name: "Amit Patel", type: "Owner", email: "amit@gmail.com" },
+  { name: "Nidhi Verma", type: "Resident", email: "nidhi@gmail.com" },
+];
+
+// ======= Section switching =======
+const navLinks = document.querySelectorAll('nav a');
+const sections = {
+  reports: document.getElementById('reportsSection'),
+  transactions: document.getElementById('transactionsSection'),
+  stats: document.getElementById('statsSection'),
+  notices: document.getElementById('noticesSection')
+};
+
+navLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+    for (let key in sections) sections[key].classList.remove('active');
+    const sectionId = link.id.replace('nav', '').toLowerCase();
+    sections[sectionId].classList.add('active');
+    clearDynamicArea();
+  });
+});
+
+// ======= Filter dropdown =======
+const filterBtn = document.getElementById('filterBtn');
+const filterDropdown = document.getElementById('filterDropdown');
+filterBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  filterDropdown.classList.toggle('active');
+});
+document.addEventListener('click', () => filterDropdown.classList.remove('active'));
+
+// ======= Dynamic area =======
+const main = document.querySelector('main');
+let resultsDiv = document.createElement('div');
+resultsDiv.id = "resultsDiv";
+resultsDiv.style.textAlign = "center";
+resultsDiv.style.marginTop = "20px";
+main.appendChild(resultsDiv);
+
+function clearDynamicArea() {
+  resultsDiv.innerHTML = "";
+}
+
+// ======= Search functionality =======
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', () => {
+  const query = searchInput.value.trim().toLowerCase();
+  clearDynamicArea();
+  if (!query) return;
+  const matches = fakePGs.filter(pg => pg.name.toLowerCase().includes(query));
+  if (matches.length === 0) {
+    resultsDiv.innerHTML = `<p style="color:#333; font-weight:600;">No PG found for "${query}"</p>`;
+    return;
+  }
+  let html = `<h3 style="color:#1b3558;">Search Results</h3>`;
+  html += matches.map(pg => `
+    <div class="card" style="margin:15px auto; max-width:600px; cursor:pointer;" onclick="showPGDetails('${pg.name}')">
+      <h3>${pg.name}</h3>
+      <p><strong>Location:</strong> ${pg.location}</p>
+      <p><strong>Rent:</strong> ${pg.rent}</p>
+      <p><strong>Owner:</strong> ${pg.owner}</p>
+    </div>
+  `).join("");
+  resultsDiv.innerHTML = html;
+});
+
+window.showPGDetails = (pgName) => {
+  const pg = fakePGs.find(p => p.name === pgName);
+  if (!pg) return;
+  resultsDiv.innerHTML = `
+    <div class="card" style="max-width:700px; margin:auto;">
+      <h2>${pg.name}</h2>
+      <p><strong>Location:</strong> ${pg.location}</p>
+      <p><strong>Owner:</strong> ${pg.owner}</p>
+      <p><strong>Rent:</strong> ${pg.rent}</p>
+      <p><strong>Status:</strong> ${pg.status}</p>
+      <p><strong>Rating:</strong> ${pg.rating} ⭐</p>
+      <button class="filter-btn" onclick="clearDynamicArea()">Close</button>
+    </div>`;
+};
+
+// ======= Reports section =======
+const reportCards = document.querySelectorAll('#reportsSection .card');
+reportCards.forEach(card => {
+  card.style.cursor = "pointer";
+  card.addEventListener('click', () => {
+    const title = card.querySelector('h3').textContent;
+    clearDynamicArea();
+    if (title.includes("PG")) {
+      displayTable("PG Reports", fakeReports.pgReports.map(r =>
+        [r.pg, r.issue, r.by, r.date]), ["PG Name", "Issue", "Reported By", "Date"]);
+    } else if (title.includes("Communities")) {
+      displayTable("Community Reports", fakeReports.communityReports.map(r =>
+        [r.post, r.by, r.date]), ["Post", "Reported By", "Date"]);
+    } else {
+      displayTable("Student Reports", fakeReports.studentReports.map(r =>
+        [r.student, r.reason, r.date]), ["Student", "Reason", "Date"]);
+    }
+  });
+});
+
+// ======= Transactions section =======
+const transactionCards = document.querySelectorAll('#transactionsSection .card');
+transactionCards.forEach(card => {
+  card.style.cursor = "pointer";
+  card.addEventListener('click', () => {
+    clearDynamicArea();
+    let rows = fakeTransactions.map(t => [t.id, t.pg, t.user, t.amount, t.date]);
+    displayTable("Recent Transactions", rows, ["Txn ID", "PG", "User", "Amount", "Date"]);
+  });
+});
+
+// ======= Stats section =======
+const statCards = document.querySelectorAll('#statsSection .card');
+statCards.forEach(card => {
+  card.style.cursor = "pointer";
+  card.addEventListener('click', () => {
+    const title = card.querySelector('h3').textContent;
+    clearDynamicArea();
+    if (title.includes("Active PGs")) {
+      const active = fakePGs.filter(pg => pg.status === "Active");
+      displayTable("Active PGs", active.map(pg => [pg.name, pg.location, pg.owner, pg.rent]), ["PG Name", "Location", "Owner", "Rent"]);
+    } else if (title.includes("Inactive PGs")) {
+      const inactive = fakePGs.filter(pg => pg.status === "Inactive");
+      displayTable("Inactive PGs", inactive.map(pg => [pg.name, pg.location, pg.owner, pg.rent]), ["PG Name", "Location", "Owner", "Rent"]);
+    } else if (title.includes("Total Users")) {
+      displayTable("Registered Users", fakeUsers.map(u => [u.name, u.type, u.email]), ["Name", "Type", "Email"]);
+    } else if (title.includes("Total Residents")) {
+      const residents = fakeUsers.filter(u => u.type === "Resident");
+      displayTable("Resident List", residents.map(u => [u.name, u.email]), ["Name", "Email"]);
+    }
+  });
+});
+
+// ======= Display helper =======
+function displayTable(title, data, headers) {
+  let html = `<h3 style="color:#1b3558;">${title}</h3>
+    <div class="table-container" style="overflow-x:auto; background:white; border-radius:12px; padding:10px;">
+    <table style="width:100%; border-collapse:collapse;">
+      <thead><tr>${headers.map(h=>`<th style='padding:8px;border-bottom:1px solid #eee;'>${h}</th>`).join("")}</tr></thead>
+      <tbody>${data.map(row => `<tr>${row.map(c=>`<td style='padding:8px;border-bottom:1px solid #f2f2f2;'>${c}</td>`).join("")}</tr>`).join("")}</tbody>
+    </table>
+    <button class="filter-btn" style="margin-top:12px;" onclick="clearDynamicArea()">Close</button>
+    </div>`;
+  resultsDiv.innerHTML = html;
+}
+
+// ======= Notice posting =======
+document.getElementById('postNoticeBtn').addEventListener('click', () => {
+  const title = document.getElementById('noticeTitle').value.trim();
+  const body = document.getElementById('noticeBody').value.trim();
+  if (!title || !body) return alert("Please enter both title and message.");
+  const newNotice = { title, body, date: new Date().toLocaleDateString() };
+  const all = JSON.parse(localStorage.getItem('adminNotices') || '[]');
+  all.push(newNotice);
+  localStorage.setItem('adminNotices', JSON.stringify(all));
+  document.getElementById('noticeTitle').value = '';
+  document.getElementById('noticeBody').value = '';
+  const status = document.getElementById('noticeStatus');
+  status.style.display = 'block';
+  setTimeout(() => status.style.display = 'none', 2000);
+});
+</script>
+
+</body>
+</html>

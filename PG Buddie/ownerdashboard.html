@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>PG-Buddie - Owner Dashboard</title>
+
+<link rel="stylesheet" href="ownerhome.css">
+
+<!-- Leaflet map library -->
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  crossorigin=""
+>
+
+<style>
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/* ==========================================
+   BODY
+========================================== */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(
+    120deg,
+    #89f7fe,
+    #66a6ff
+  );
+
+  margin: 0;
+  color: #333;
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  background: linear-gradient(
+    120deg,
+    #89f7fe,
+    #66a6ff
+  );
+
+  color: #fff;
+
+  padding: 14px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow:
+    0 3px 10px rgba(0,0,0,0.1);
+
+  animation:
+    fadeIn 0.6s ease forwards;
+}
+
+
+header nav a {
+  color: #fff;
+
+  margin-left: 18px;
+
+  text-decoration: none;
+
+  font-weight: 600;
+}
+
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+
+/* ==========================================
+   PAGE TITLE
+========================================== */
+
+h1 {
+  text-align: center;
+
+  margin: 20px 0;
+
+  color: #fff;
+
+  animation:
+    fadeInUp 0.7s ease-out;
+}
+
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+.dashboard {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(250px, 1fr)
+    );
+
+  gap: 18px;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding:
+    0 16px 40px;
+}
+
+
+/* ==========================================
+   CARDS
+========================================== */
+
+.card {
+
+  background: #fff;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,0,0,0.06);
+
+  animation:
+    fadeInUp 0.7s ease-out;
+
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+
+.card:hover {
+
+  transform:
+    translateY(-6px);
+
+  box-shadow:
+    0 18px 36px
+    rgba(0,0,0,0.12);
+}
+
+
+.card h3 {
+
+  margin:
+    0 0 8px;
+
+  font-size:
+    1.1rem;
+
+  color:
+    #222;
+}
+
+
+.status {
+
+  font-size:
+    1.5rem;
+
+  font-weight:
+    700;
+
+  color:
+    #0077b6;
+
+  margin-top:
+    6px;
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+.toggle-btn,
+.add-pg-btn,
+.pg-cancel-btn {
+
+  padding:
+    10px 16px;
+
+  border-radius:
+    8px;
+
+  border:
+    none;
+
+  cursor:
+    pointer;
+
+  font-weight:
+    600;
+
+  transition:
+    background 0.25s,
+    opacity 0.25s;
+}
+
+
+.toggle-btn,
+.add-pg-btn {
+
+  background:
+    #66a6ff;
+
+  color:
+    #fff;
+}
+
+
+.toggle-btn.off {
+
+  background:
+    #ddd;
+
+  color:
+    #555;
+}
+
+
+.toggle-btn:hover,
+.add-pg-btn:hover,
+.pg-cancel-btn:hover {
+
+  opacity:
+    0.9;
+}
+
+
+.pg-cancel-btn {
+
+  background:
+    #eee;
+
+  color:
+    #555;
+}
+
+
+/* ==========================================
+   PG SELECTOR AREA
+========================================== */
+
+.pg-selector-card {
+
+  max-width:
+    1200px;
+
+  margin:
+    20px auto;
+
+  padding:
+    0 16px;
+}
+
+
+.pg-selector-inner {
+
+  background:
+    #fff;
+
+  border-radius:
+    14px;
+
+  padding:
+    22px;
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,0,0,0.08);
+}
+
+
+.pg-selector-label {
+
+  display:
+    block;
+
+  font-weight:
+    700;
+
+  margin-bottom:
+    8px;
+
+  color:
+    #222;
+}
+
+
+#pgSelector {
+
+  width:
+    100%;
+
+  box-sizing:
+    border-box;
+
+  padding:
+    12px;
+
+  border:
+    1px solid #ddd;
+
+  border-radius:
+    8px;
+
+  font-size:
+    1rem;
+
+  background:
+    #fff;
+}
+
+
+.selected-pg {
+
+  margin-top:
+    18px;
+
+  padding:
+    16px;
+
+  border-radius:
+    10px;
+
+  background:
+    #f5faff;
+}
+
+
+.selected-pg h2 {
+
+  margin:
+    0 0 6px;
+
+  color:
+    #0077b6;
+}
+
+
+.selected-pg p {
+
+  margin:
+    0;
+
+  color:
+    #666;
+}
+
+
+.pg-actions {
+
+  margin-top:
+    14px;
+
+  display:
+    flex;
+
+  justify-content:
+    flex-end;
+}
+
+
+/* ==========================================
+   MODAL
+========================================== */
+
+.pg-modal {
+
+  display:
+    none;
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    2000;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    20px;
+
+  background:
+    rgba(0,0,0,0.55);
+}
+
+
+.pg-modal.show {
+
+  display:
+    flex;
+}
+
+
+.pg-modal-content {
+
+  width:
+    min(700px, 100%);
+
+  max-height:
+    92vh;
+
+  overflow-y:
+    auto;
+
+  background:
+    #fff;
+
+  border-radius:
+    16px;
+
+  padding:
+    24px;
+
+  box-sizing:
+    border-box;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,0.25);
+}
+
+
+.pg-modal-header {
+
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+
+  margin-bottom:
+    20px;
+}
+
+
+.pg-modal-header h2 {
+
+  margin:
+    0;
+
+  color:
+    #222;
+}
+
+
+/* ==========================================
+   FORM
+========================================== */
+
+.pg-form-group {
+
+  margin-bottom:
+    16px;
+}
+
+
+.pg-form-group label {
+
+  display:
+    block;
+
+  font-weight:
+    600;
+
+  margin-bottom:
+    7px;
+
+  color:
+    #333;
+}
+
+
+.pg-form-group input,
+.pg-form-group textarea,
+.pg-form-group select {
+
+  width:
+    100%;
+
+  box-sizing:
+    border-box;
+
+  padding:
+    11px 12px;
+
+  border:
+    1px solid #d8d8d8;
+
+  border-radius:
+    8px;
+
+  font-family:
+    inherit;
+
+  font-size:
+    0.95rem;
+
+  outline:
+    none;
+}
+
+
+.pg-form-group input:focus,
+.pg-form-group textarea:focus,
+.pg-form-group select:focus {
+
+  border-color:
+    #66a6ff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(102,166,255,0.12);
+}
+
+
+.pg-form-row {
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    14px;
+}
+
+
+/* ==========================================
+   ROOM SHARING
+========================================== */
+
+.room-type-row {
+  position: relative;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(0, 1.15fr);
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 12px;
+  padding: 14px 60px 14px 14px;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  background: #fafcff;
+}
+
+.room-type-row .pg-form-group {
+  margin-bottom: 0;
+  min-width: 0;
+}
+
+.room-type-row .pg-form-group label {
+  white-space: nowrap;
+}
+
+.room-type-row .room-rent-group input {
+  font-variant-numeric: tabular-nums;
+}
+
+.room-type-row .room-details {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+}
+
+.room-type-row .room-prefix-group {
+  display: none;
+}
+
+.room-type-row .room-type-remove {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid #e2e2e2;
+  border-radius: 50%;
+  background: #f4f4f4;
+  color: #666;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+
+.room-type-remove:hover {
+  background: #ffe9e9;
+  color: #c0392b;
+  transform: scale(1.05);
+}
+
+.room-type-remove:focus-visible {
+  outline: 3px solid rgba(102,166,255,0.25);
+  outline-offset: 2px;
+}
+
+.room-name-preview {
+  grid-column: 1 / -1;
+  margin-top: 0;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d7ebff;
+  background: #eef7ff;
+  color: #24506d;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.room-name-preview.error {
+  background: #fff2f2;
+  border-color: #ffd2d2;
+  color: #a33a3a;
+}
+
+.room-naming-help,
+.room-naming-note {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.room-naming-note {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+}
+
+.room-summary {
+  margin: 12px 0 18px;
+  padding: 14px;
+  border-radius: 10px;
+  background: #f5faff;
+  border: 1px solid #dceeff;
+}
+
+.room-summary div {
+  font-size: 0.95rem;
+}
+
+
+/* ==========================================
+   LOCATION
+========================================== */
+
+.location-actions {
+
+  display:
+    flex;
+
+  gap:
+    10px;
+
+  flex-wrap:
+    wrap;
+}
+
+
+.location-status {
+
+  margin-top:
+    10px;
+
+  color:
+    #666;
+
+  font-size:
+    0.9rem;
+}
+
+
+/* ==========================================
+   MAP MODAL
+========================================== */
+
+#locationMapModal {
+
+  display:
+    none;
+
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    3000;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    20px;
+
+  background:
+    rgba(0,0,0,0.55);
+}
+
+
+#locationMapModal.show {
+
+  display:
+    flex;
+}
+
+
+#locationMapModal
+.pg-modal-content {
+
+  width:
+    min(900px, 100%);
+
+  max-height:
+    92vh;
+
+  overflow:
+    auto;
+
+  background:
+    #fff;
+
+  border-radius:
+    16px;
+
+  padding:
+    20px;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,0.25);
+}
+
+
+#pgLocationMap {
+
+  width:
+    100%;
+
+  height:
+    420px;
+
+  margin-top:
+    16px;
+
+  border-radius:
+    12px;
+
+  overflow:
+    hidden;
+}
+
+
+/* ==========================================
+   FORM MESSAGE
+========================================== */
+
+#pgFormMessage {
+
+  min-height:
+    22px;
+
+  margin:
+    10px 0;
+
+  font-weight:
+    600;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 650px) {
+
+  header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  header nav a {
+    margin-left: 10px;
+  }
+
+  .pg-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .room-type-row,
+  .room-type-row.mode-prefix,
+  .room-type-row.mode-later {
+    grid-template-columns: 1fr 1fr;
+    padding-right: 60px;
+  }
+
+  .room-type-row .room-details {
+    grid-template-columns: 1fr;
+  }
+
+  #pgLocationMap {
+    height: 350px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ========================================
+     HEADER
+========================================= -->
+
+<header>
+
+  <div
+    class="logo"
+    style="
+      font-size:1.4rem;
+      font-weight:700;
+    "
+  >
+    PG-Buddie
+  </div>
+
+
+  <nav>
+
+    <a href="hybridwelcomepage.html">
+      Home
+    </a>
+
+    <a href="#" id="complaintsLink">
+      Complaints
+    </a>
+
+    <a href="ownerprofile.html">
+      Profile
+    </a>
+
+    <a href="#" id="logoutBtn">
+      Logout
+    </a>
+
+  </nav>
+
+</header>
+
+
+<!-- ========================================
+     TITLE
+========================================= -->
+
+<h1>
+  Owner Dashboard
+</h1>
+
+
+<p
+  style="
+    text-align:center;
+    color:#fff;
+    font-size:1.1rem;
+  "
+>
+  👋 Welcome,
+  <span id="ownerNameText">
+    Owner
+  </span>
+</p>
+
+
+<!-- ========================================
+     PG SELECTOR
+========================================= -->
+
+<section class="pg-selector-card">
+
+  <div class="pg-selector-inner">
+
+    <label
+      class="pg-selector-label"
+      for="pgSelector"
+    >
+      Your PG
+    </label>
+
+
+    <p
+      style="
+        margin-top:0;
+        color:#666;
+      "
+    >
+      Select the PG whose dashboard
+      statistics you want to view.
+    </p>
+
+
+    <select id="pgSelector">
+
+      <option value="">
+        Loading your PGs...
+      </option>
+
+    </select>
+
+
+    <div class="selected-pg">
+
+      <h2 id="selectedPGName">
+        No PG selected
+      </h2>
+
+      <p id="selectedPGDetails">
+        Add a PG to start managing
+        your property.
+      </p>
+
+    </div>
+
+
+    <div class="pg-actions">
+
+      <button
+        type="button"
+        class="add-pg-btn"
+        id="addPgBtn"
+      >
+        + Add New PG
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ========================================
+     DASHBOARD
+========================================= -->
+
+<section class="dashboard">
+
+
+  <!-- Students -->
+
+  <div class="card">
+
+    <h3>
+      Students Residing
+    </h3>
+
+    <div
+      class="status"
+      id="studentCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <!-- Capacity -->
+
+  <div class="card">
+
+    <h3>
+      Total Capacity
+    </h3>
+
+    <div
+      class="status"
+      id="capacityCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <!-- Available Beds -->
+
+  <div class="card">
+
+    <h3>
+      Available Beds
+    </h3>
+
+    <div
+      class="status"
+      id="availableBedsCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <!-- Occupancy -->
+
+  <div class="card">
+
+    <h3>
+      Occupancy
+    </h3>
+
+    <div
+      class="status"
+      id="occupancyCount"
+    >
+      0%
+    </div>
+
+  </div>
+
+
+  <!-- Water -->
+
+  <div class="card">
+
+    <h3>
+      Water Supply
+    </h3>
+
+    <h5>
+      enable or disable water status
+    </h5>
+
+    <button
+      class="toggle-btn"
+      id="toggleWater"
+    >
+      Turn Off
+    </button>
+
+  </div>
+
+
+  <!-- Power -->
+
+  <div class="card">
+
+    <h3>
+      Power Supply
+    </h3>
+
+    <h5>
+      enable or disable power status
+    </h5>
+
+    <button
+      class="toggle-btn"
+      id="togglePower"
+    >
+      Turn Off
+    </button>
+
+  </div>
+
+
+  <!-- Mess -->
+
+  <div class="card">
+
+    <h3>
+      Mess Service
+    </h3>
+
+    <h4>
+      0 students booked
+    </h4>
+
+    <button
+      class="toggle-btn"
+      id="toggleMess"
+    >
+      Turn Off
+    </button>
+
+  </div>
+
+
+  <!-- Complaints -->
+
+  <div class="card">
+
+    <h3>
+      Complaints
+    </h3>
+
+    <div
+      class="status"
+      id="complaintsCount"
+    >
+      0
+    </div>
+
+    <button
+      class="toggle-btn"
+      id="viewComplaints"
+    >
+      View Complaints
+    </button>
+
+  </div>
+
+
+  <!-- Expenditure -->
+
+  <div class="card">
+
+    <h3>
+      This Month Expenditure
+    </h3>
+
+    <div
+      class="status"
+      id="expenditure"
+    >
+      ₹0
+    </div>
+
+  </div>
+
+
+  <!-- Check-in -->
+
+  <div
+    class="card"
+    id="checkinCard"
+  >
+
+    <h3>
+      New Requests
+    </h3>
+
+    <h4>
+      0 requests for check-in
+    </h4>
+
+  </div>
+
+
+  <!-- Notice -->
+
+  <div class="card">
+
+    <h3>
+      Latest Notice
+    </h3>
+
+    <p id="noticeText">
+      No notices yet.
+    </p>
+
+    <button
+      class="toggle-btn"
+      id="addNoticeBtn"
+    >
+      Post Notice
+    </button>
+
+  </div>
+
+
+</section>
+
+
+<!-- ========================================
+     ADD PG MODAL
+========================================= -->
+
+<div
+  id="pgModal"
+  class="pg-modal"
+  aria-hidden="true"
+>
+
+  <div class="pg-modal-content">
+
+
+    <div class="pg-modal-header">
+
+      <h2>
+        Add New PG
+      </h2>
+
+      <button
+        type="button"
+        class="pg-cancel-btn"
+        id="closePgModal"
+      >
+        Close
+      </button>
+
+    </div>
+
+
+    <form id="pgForm">
+
+
+      <!-- PG NAME -->
+
+      <div class="pg-form-group">
+
+        <label for="pgName">
+          PG Name
+        </label>
+
+        <input
+          type="text"
+          id="pgName"
+          placeholder="e.g. 7 Hills"
+          required
+        >
+
+      </div>
+
+
+      <!-- DESCRIPTION -->
+
+      <div class="pg-form-group">
+
+        <label for="pgDescription">
+          Description
+        </label>
+
+        <textarea
+          id="pgDescription"
+          rows="3"
+          placeholder="Tell students briefly about your PG..."
+        ></textarea>
+
+      </div>
+
+
+      <!-- ADDRESS -->
+
+      <div class="pg-form-group">
+
+        <label for="pgAddress">
+          Address
+        </label>
+
+        <input
+          type="text"
+          id="pgAddress"
+          placeholder="Street / area / landmark"
+          required
+        >
+
+      </div>
+
+
+      <!-- CITY + RENT -->
+
+      <div class="pg-form-row">
+
+
+        <div class="pg-form-group">
+
+          <label for="pgCity">
+            City
+          </label>
+
+          <input
+            type="text"
+            id="pgCity"
+            placeholder="e.g. Tirupati"
+            required
+          >
+
+        </div>
+        <!-- Room rent is entered per room-sharing type below. -->
+        <input type="hidden" id="pgRent" value="0">
+
+
+
+      </div>
+
+
+      <!-- ROOM SHARING -->
+
+      <div class="pg-form-group">
+
+        <label>Room Sharing Configuration</label>
+
+        <p class="room-naming-help">
+          Add each room-sharing type available in your PG.
+          Choose how PG-Buddie should generate the room names.
+        </p>
+
+        <div class="pg-form-group" style="margin-bottom:14px;">
+
+          <label for="roomNamingStyle">
+            Room Naming Style
+          </label>
+
+          <select id="roomNamingStyle">
+            <option value="number">
+              Simple numbers (101, 102, 103...)
+            </option>
+            <option value="prefix-number">
+              Prefix + numbers (A-101, A-102...)
+            </option>
+            <option value="later">
+              I'll name the rooms later
+            </option>
+          </select>
+
+          <p class="room-naming-note" id="roomNamingStyleHelp">
+            For each sharing type, enter the first room number.
+            The remaining room names will be generated automatically from the room count.
+          </p>
+
+        </div>
+
+        <div id="roomTypesContainer"></div>
+
+        <button
+          type="button"
+          class="add-pg-btn"
+          id="addRoomTypeBtn"
+        >
+          + Add Room Type
+        </button>
+
+      </div>
+
+
+      <!-- ROOM SUMMARY -->
+
+      <div class="room-summary">
+
+        <div>
+
+          <strong>
+            Total Rooms:
+          </strong>
+
+          <span
+            id="calculatedTotalRooms"
+          >
+            0
+          </span>
+
+        </div>
+
+
+        <div
+          style="margin-top:5px;"
+        >
+
+          <strong>
+            Total Capacity:
+          </strong>
+
+          <span
+            id="calculatedCapacity"
+          >
+            0
+          </span>
+
+          beds
+
+        </div>
+
+      </div>
+
+
+      <!-- GENDER -->
+
+      <div class="pg-form-group">
+
+        <label for="pgGender">
+          PG For
+        </label>
+
+
+        <select
+          id="pgGender"
+          required
+        >
+
+          <option value="co-ed">
+            Co-ed
+          </option>
+
+          <option value="male">
+            Male
+          </option>
+
+          <option value="female">
+            Female
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- PHONE -->
+
+      <div class="pg-form-group">
+
+        <label for="pgPhone">
+          Contact Phone
+        </label>
+
+        <input
+          type="tel"
+          id="pgPhone"
+          placeholder="e.g. 9876543210"
+        >
+
+      </div>
+
+
+      <!-- AMENITIES -->
+
+      <div class="pg-form-group">
+
+        <label for="pgAmenities">
+          Amenities
+        </label>
+
+        <input
+          type="text"
+          id="pgAmenities"
+          placeholder="WiFi, Food, Laundry, Parking"
+        >
+
+      </div>
+
+
+      <!-- LOCATION -->
+
+      <div class="pg-form-group">
+
+        <label>
+          📍 PG Location
+        </label>
+
+
+        <p
+          style="
+            margin:4px 0 12px;
+            color:#666;
+            font-size:0.9rem;
+          "
+        >
+          Help students find your PG.
+          You don't need to enter
+          latitude or longitude.
+        </p>
+
+
+        <div class="location-actions">
+
+
+          <button
+            type="button"
+            class="add-pg-btn"
+            id="useCurrentLocationBtn"
+          >
+            📍 Use My Current Location
+          </button>
+
+
+          <button
+            type="button"
+            class="add-pg-btn"
+            id="pickLocationBtn"
+          >
+            🗺️ Pick on Map
+          </button>
+
+
+          <button
+            type="button"
+            class="pg-cancel-btn"
+            id="clearLocationBtn"
+          >
+            Clear Location
+          </button>
+
+
+        </div>
+
+
+        <div
+          id="locationStatus"
+          class="location-status"
+        >
+          Location is optional.
+          You can add it now or later.
+        </div>
+
+
+        <!-- Hidden coordinate fields -->
+
+        <input
+          type="hidden"
+          id="pgLatitude"
+        >
+
+        <input
+          type="hidden"
+          id="pgLongitude"
+        >
+
+      </div>
+
+
+      <!-- MESSAGE -->
+
+      <div
+        id="pgFormMessage"
+      ></div>
+
+
+      <!-- FORM BUTTONS -->
+
+      <div
+        style="
+          display:flex;
+          justify-content:flex-end;
+          gap:10px;
+          margin-top:18px;
+        "
+      >
+
+        <button
+          type="button"
+          class="pg-cancel-btn"
+          id="cancelPgBtn"
+        >
+          Cancel
+        </button>
+
+
+        <button
+          type="submit"
+          class="add-pg-btn"
+        >
+          Add PG
+        </button>
+
+      </div>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ========================================
+     LOCATION MAP MODAL
+========================================= -->
+
+<div
+  id="locationMapModal"
+  aria-hidden="true"
+>
+
+
+  <div class="pg-modal-content">
+
+
+    <div
+      style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+      "
+    >
+
+      <div>
+
+        <h2
+          style="margin:0;"
+        >
+          Choose PG Location
+        </h2>
+
+
+        <p
+          style="
+            margin:6px 0 0;
+            color:#666;
+          "
+        >
+          Click the map where your PG
+          is located. You can drag the
+          pin to fine-tune it.
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="pg-cancel-btn"
+        id="closeLocationMapBtn"
+      >
+        Close
+      </button>
+
+    </div>
+
+
+    <div
+      id="pgLocationMap"
+    ></div>
+
+
+    <div
+      id="mapLocationStatus"
+      style="
+        margin-top:10px;
+        color:#666;
+        font-size:0.9rem;
+      "
+    >
+      Click the map to choose
+      the PG location.
+    </div>
+
+
+    <div
+      style="
+        display:flex;
+        justify-content:flex-end;
+        gap:10px;
+        margin-top:14px;
+      "
+    >
+
+      <button
+        type="button"
+        class="pg-cancel-btn"
+        id="cancelMapLocationBtn"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        type="button"
+        class="add-pg-btn"
+        id="confirmMapLocationBtn"
+        disabled
+      >
+        Use This Location
+      </button>
+
+    </div>
+
+
+  </div>
+
+</div>
+
+
+<!-- ========================================
+     LEAFLET JS
+========================================= -->
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""
+></script>
+
+
+<!-- ========================================
+     ROOM TYPE + ROOM NAMING HELPER
+========================================= -->
+
+<script>
+(function () {
+
+  const container = document.getElementById("roomTypesContainer");
+  const addButton = document.getElementById("addRoomTypeBtn");
+  const totalRooms = document.getElementById("calculatedTotalRooms");
+  const totalCapacity = document.getElementById("calculatedCapacity");
+  const namingStyleSelect = document.getElementById("roomNamingStyle");
+  const namingStyleHelp = document.getElementById("roomNamingStyleHelp");
+
+  if (!container || !addButton || !namingStyleSelect) return;
+
+
+  function createRoomRow(
+    defaultSharing = "",
+    defaultCount = "",
+    defaultRent = "",
+    defaultStart = "",
+    defaultPrefix = ""
+  ) {
+
+    const row = document.createElement("div");
+    row.className = "room-type-row";
+
+    row.innerHTML = `
+      <div class="pg-form-group">
+        <label>Room sharing</label>
+        <input
+          type="number"
+          class="room-sharing-input"
+          min="1"
+          step="1"
+          placeholder="e.g. 5"
+          value="${defaultSharing}"
+          required
+        >
+        <small style="display:block;margin-top:4px;color:#777;">
+          Students per room
+        </small>
+      </div>
+
+      <div class="pg-form-group">
+        <label>Number of rooms</label>
+        <input
+          type="number"
+          class="room-count-input"
+          min="1"
+          step="1"
+          placeholder="e.g. 10"
+          value="${defaultCount}"
+          required
+        >
+        <small style="display:block;margin-top:4px;color:#777;">
+          How many rooms?
+        </small>
+      </div>
+
+      <div class="pg-form-group room-rent-group">
+        <label>Monthly rent (₹)</label>
+        <input
+          type="number"
+          class="room-rent-input"
+          min="0"
+          step="1"
+          placeholder="e.g. 6000"
+          value="${defaultRent}"
+          required
+        >
+        <small style="display:block;margin-top:4px;color:#777;">
+          Per room / month
+        </small>
+      </div>
+
+      <button
+        type="button"
+        class="room-type-remove"
+        aria-label="Remove room type"
+        title="Remove room type"
+      >
+        ×
+      </button>
+
+      <div class="room-details">
+
+        <div class="pg-form-group room-prefix-group">
+          <label>Prefix</label>
+          <input
+            type="text"
+            class="room-prefix-input"
+            maxlength="20"
+            placeholder="e.g. A-"
+            value="${defaultPrefix}"
+          >
+          <small style="display:block;margin-top:4px;color:#777;">
+            Used before the number
+          </small>
+        </div>
+
+        <div class="pg-form-group room-start-group">
+          <label>Starting room number</label>
+          <input
+            type="number"
+            class="room-start-input"
+            min="0"
+            step="1"
+            placeholder="e.g. 101"
+            value="${defaultStart}"
+          >
+          <small style="display:block;margin-top:4px;color:#777;">
+            End is calculated automatically
+          </small>
+        </div>
+
+      </div>
+
+      <div class="room-name-preview">
+        <strong>Preview:</strong>
+        <span class="room-preview-text">
+          Enter the room details
+        </span>
+      </div>
+    `;
+
+    row
+      .querySelector(".room-type-remove")
+      .addEventListener("click", () => {
+        row.remove();
+        updateAll();
+      });
+
+    row.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("input", updateAll);
+    });
+
+    container.appendChild(row);
+    updateAll();
+  }
+
+
+  function getNamingStyle() {
+    return namingStyleSelect.value;
+  }
+
+
+  function generateRoomNames(room) {
+
+    const style = getNamingStyle();
+    const count = Number(room.roomCount);
+
+    if (!Number.isInteger(count) || count < 1) {
+      return [];
+    }
+
+    if (style === "later") {
+      return Array.from(
+        { length: count },
+        (_, i) => `Room ${i + 1}`
+      );
+    }
+
+    const start = Number(room.startNumber);
+
+    if (!Number.isInteger(start) || start < 0) {
+      return [];
+    }
+
+    const prefix =
+      style === "prefix-number"
+        ? (room.prefix || "")
+        : "";
+
+    return Array.from(
+      { length: count },
+      (_, i) => `${prefix}${start + i}`
+    );
+  }
+
+
+  function getRoomTypes() {
+
+    return Array.from(
+      container.querySelectorAll(".room-type-row")
+    )
+      .map((row) => ({
+        sharing: Number(
+          row.querySelector(".room-sharing-input").value
+        ),
+
+        roomCount: Number(
+          row.querySelector(".room-count-input").value
+        ),
+
+        rent:
+          row.querySelector(".room-rent-input").value === ""
+            ? null
+            : Number(
+                row.querySelector(".room-rent-input").value
+              ),
+
+        startNumber:
+          row.querySelector(".room-start-input").value === ""
+            ? null
+            : Number(
+                row.querySelector(".room-start-input").value
+              ),
+
+        prefix:
+          row.querySelector(".room-prefix-input").value.trim(),
+
+        namingStyle: getNamingStyle()
+      }))
+      .filter(
+        (room) =>
+          Number.isInteger(room.sharing) &&
+          room.sharing >= 1 &&
+          Number.isInteger(room.roomCount) &&
+          room.roomCount >= 1
+      );
+  }
+
+
+  function updateRowPreview(row) {
+
+    const sharing = Number(
+      row.querySelector(".room-sharing-input").value
+    );
+
+    const count = Number(
+      row.querySelector(".room-count-input").value
+    );
+
+    const rent =
+      row.querySelector(".room-rent-input").value;
+
+    const startValue =
+      row.querySelector(".room-start-input").value;
+
+    const prefix =
+      row.querySelector(".room-prefix-input").value.trim();
+
+    const preview =
+      row.querySelector(".room-preview-text");
+
+    const box =
+      row.querySelector(".room-name-preview");
+
+    const style = getNamingStyle();
+
+    box.classList.remove("error");
+
+
+    if (
+      !Number.isInteger(sharing) ||
+      sharing < 1 ||
+      !Number.isInteger(count) ||
+      count < 1
+    ) {
+      preview.textContent =
+        "Enter sharing and room count.";
+      return;
+    }
+
+
+    if (
+      rent === "" ||
+      !Number.isFinite(Number(rent)) ||
+      Number(rent) < 0
+    ) {
+      preview.textContent =
+        "Enter the monthly rent for this room type.";
+      box.classList.add("error");
+      return;
+    }
+
+
+    if (style === "later") {
+
+      const names = Array.from(
+        { length: Math.min(count, 6) },
+        (_, i) => `Room ${i + 1}`
+      );
+
+      if (count > 6) names.push("...");
+
+      preview.textContent =
+        names.join(" • ");
+
+      return;
+    }
+
+
+    const start = Number(startValue);
+
+    if (!Number.isInteger(start) || start < 0) {
+      preview.textContent =
+        "Enter a starting room number.";
+      box.classList.add("error");
+      return;
+    }
+
+
+    if (
+      style === "prefix-number" &&
+      !prefix
+    ) {
+      preview.textContent =
+        "Enter a prefix.";
+      box.classList.add("error");
+      return;
+    }
+
+
+    const displayPrefix =
+      style === "prefix-number"
+        ? prefix
+        : "";
+
+    const names = Array.from(
+      { length: Math.min(count, 6) },
+      (_, i) =>
+        `${displayPrefix}${start + i}`
+    );
+
+    if (count > 6) names.push("...");
+
+    const end =
+      start + count - 1;
+
+    preview.textContent =
+      `${names.join(" • ")}  (through ${displayPrefix}${end})`;
+  }
+
+
+  function updateNamingUI() {
+
+    const style =
+      getNamingStyle();
+
+    namingStyleHelp.textContent =
+      style === "number"
+        ? "Enter the first room number for each sharing type. PG-Buddie calculates the rest from the room count."
+        : style === "prefix-number"
+          ? "Enter a prefix and first room number for each sharing type. PG-Buddie calculates the rest from the room count."
+          : "Temporary room names will be created automatically. You can rename individual rooms later.";
+
+
+    container
+      .querySelectorAll(".room-type-row")
+      .forEach((row) => {
+
+        row.classList.remove(
+          "mode-number",
+          "mode-prefix",
+          "mode-later"
+        );
+
+
+        if (style === "prefix-number") {
+          row.classList.add("mode-prefix");
+        } else if (style === "later") {
+          row.classList.add("mode-later");
+        } else {
+          row.classList.add("mode-number");
+        }
+
+
+        const prefixGroup =
+          row.querySelector(".room-prefix-group");
+
+        const startGroup =
+          row.querySelector(".room-start-group");
+
+
+        if (prefixGroup) {
+          prefixGroup.style.display =
+            style === "prefix-number"
+              ? "block"
+              : "none";
+        }
+
+
+        if (startGroup) {
+          startGroup.style.display =
+            style === "later"
+              ? "none"
+              : "block";
+        }
+
+
+        updateRowPreview(row);
+      });
+  }
+
+
+  function updateSummary() {
+
+    const rooms =
+      getRoomTypes();
+
+    totalRooms.textContent =
+      rooms.reduce(
+        (sum, room) =>
+          sum + room.roomCount,
+        0
+      );
+
+    totalCapacity.textContent =
+      rooms.reduce(
+        (sum, room) =>
+          sum +
+          room.sharing *
+          room.roomCount,
+        0
+      );
+  }
+
+
+  function updateDuplicateWarnings() {
+
+    const rooms =
+      getRoomTypes();
+
+    const seen =
+      new Set();
+
+    const duplicates =
+      new Set();
+
+
+    rooms.forEach((room) => {
+
+      generateRoomNames(room)
+        .forEach((name) => {
+
+          const key =
+            name
+              .trim()
+              .toLowerCase();
+
+          if (seen.has(key)) {
+            duplicates.add(name);
+          } else {
+            seen.add(key);
+          }
+        });
+
+    });
+
+
+    container
+      .querySelectorAll(".room-type-row")
+      .forEach((row) => {
+
+        const box =
+          row.querySelector(".room-name-preview");
+
+        const preview =
+          row.querySelector(".room-preview-text");
+
+        const sharing =
+          Number(
+            row.querySelector(
+              ".room-sharing-input"
+            ).value
+          );
+
+        const count =
+          Number(
+            row.querySelector(
+              ".room-count-input"
+            ).value
+          );
+
+        const rent =
+          row.querySelector(
+            ".room-rent-input"
+          ).value === ""
+            ? null
+            : Number(
+                row.querySelector(
+                  ".room-rent-input"
+                ).value
+              );
+
+        const start =
+          Number(
+            row.querySelector(
+              ".room-start-input"
+            ).value
+          );
+
+        const prefix =
+          row.querySelector(
+            ".room-prefix-input"
+          ).value.trim();
+
+
+        const room = {
+          sharing,
+          roomCount: count,
+          rent,
+          startNumber: start,
+          prefix
+        };
+
+
+        const generated =
+          generateRoomNames(room);
+
+        const rowDuplicates =
+          generated.filter(
+            (name) =>
+              duplicates.has(name)
+          );
+
+
+        if (rowDuplicates.length) {
+
+          box.classList.add("error");
+
+          preview.textContent +=
+            ` • ⚠ Duplicate: ${[
+              ...new Set(rowDuplicates)
+            ].join(", ")}`;
+        }
+
+      });
+  }
+
+
+  function updateAll() {
+
+    updateSummary();
+
+    updateNamingUI();
+
+    updateDuplicateWarnings();
+
+  }
+
+
+  window.getRoomTypes =
+    getRoomTypes;
+
+
+  window.resetRoomTypes =
+    function () {
+
+      container.innerHTML = "";
+
+      createRoomRow();
+
+    };
+
+
+  namingStyleSelect.addEventListener(
+    "change",
+    updateAll
+  );
+
+
+  addButton.addEventListener(
+    "click",
+    () => createRoomRow()
+  );
+
+
+  createRoomRow();
+
+})();
+</script>
+
+
+<!-- ========================================
+     OWNER JAVASCRIPT
+========================================= -->
+
+<script src="owner.js"></script>
+
+
+</body>
+
+</html>

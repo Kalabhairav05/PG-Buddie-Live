@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome | PG Buddie</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    /* ===== Reset & Base ===== */
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto', sans-serif; }
+    body { line-height:1.6; background:linear-gradient(135deg,#89f7fe,#66a6ff); color:#333; scroll-behavior:smooth; overflow-x:hidden; transition: all 0.8s ease; }
+
+    /* ===== Header ===== */
+    header {
+        position: sticky; top: 0; width: 100%; z-index: 100;
+        background: linear-gradient(135deg,#89f7fe,#66a6ff);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    nav ul { display: flex; justify-content: center; list-style: none; gap: 25px; padding: 15px; flex-wrap: wrap; }
+    nav ul li a {
+        text-decoration: none; font-weight: bold; color: #111;
+        padding: 8px 15px; border-radius: 5px; transition: all 0.3s ease;
+    }
+    nav ul li a:hover { color:white; background:rgba(255,255,255,0.1); box-shadow:0 0 10px rgba(255,255,255,0.5); }
+
+    /* ===== Hero ===== */
+    #hero {
+        background: url('https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
+        background-size: cover;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+
+    #hero::after {
+        content: '';
+        position: absolute;
+        top:0; left:0; width:100%; height:100%;
+        background: rgba(0,0,0,0.55);
+    }
+    #hero .content { position:relative; z-index:1; animation: fadeIn 1.5s ease forwards; opacity:0; }
+    #hero h1 { font-size:3.5rem; margin-bottom:20px; text-shadow:2px 2px 8px rgba(0,0,0,0.7); animation: slideInDown 1.5s ease; }
+    #hero p { font-size:1.3rem; margin-bottom:30px; text-shadow:1px 1px 6px rgba(0,0,0,0.6); animation: fadeIn 2.5s ease; }
+    .cta-btn {
+        display:inline-block; background:linear-gradient(135deg,#89f7fe,#66a6ff);
+        color:white; padding:12px 25px; margin:5px; border-radius:8px;
+        font-weight:bold; text-decoration:none; transition:0.3s; 
+        box-shadow:0 4px 15px rgba(0,0,0,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    .cta-btn::before {
+        content:""; position:absolute; top:0; left:-75%; width:50%; height:100%;
+        background: rgba(255,255,255,0.25);
+        transform: skewX(-25deg);
+        transition: all 0.7s ease-in-out;
+    }
+    .cta-btn:hover::before { left:125%; }
+    .cta-btn:hover { transform: scale(1.1); box-shadow:0 0 40px #89f7fe; }
+
+    /* ===== About Section ===== */
+    section { padding:80px 20px; max-width:1200px; margin:auto; }
+    section h2 { text-align:center; margin-bottom:50px; font-size:2.5rem; color:#000; position:relative; }
+    section h2::after {
+        content:""; display:block; width:80px; height:4px;
+        background:linear-gradient(135deg,#66a6ff,#89f7fe);
+        margin:10px auto 0; border-radius:2px;
+    }
+
+    /* ===== Cards ===== */
+    .cards { display:flex; flex-wrap:wrap; justify-content:center; gap:30px; }
+    .card {
+        background:white; border-radius:15px; padding:30px 20px; flex:1 1 280px;
+        box-shadow:0 5px 20px rgba(0,0,0,0.1); text-align:center;
+        transform:translateY(50px); opacity:0; transition:all 0.6s ease;
+    }
+    .card.visible { transform:translateY(0); opacity:1; }
+    .card:hover { transform:translateY(-10px) scale(1.05); box-shadow:0 10px 40px rgba(0,0,0,0.3); }
+    .card h3 { margin-bottom:15px; color:#66a6ff; }
+    .card p { font-size:1rem; line-height:1.6; }
+    .card i { font-size:2rem; color:#66a6ff; margin-bottom:10px; display:block; }
+
+    /* ===== Contact ===== */
+    .contact-details { display:flex; justify-content:space-around; gap:20px; flex-wrap:wrap; margin-top:20px; }
+    .contact-details div { flex:1; min-width:180px; }
+    .contact-details h3 { margin-bottom:10px; color:#333; }
+
+    /* ===== Footer ===== */
+    footer { background:linear-gradient(135deg,#66a6ff,#89f7fe); color:#111; text-align:center; padding:30px; margin-top:40px; }
+    footer p { margin-bottom:10px; }
+    footer .social { display:flex; justify-content:center; gap:20px; margin-top:10px; }
+    footer .social a { color:white; font-size:1.2rem; transition:0.3s; }
+    footer .social a:hover { color:#66a6ff; }
+
+    /* ===== Animations ===== */
+    @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+    @keyframes slideInDown { from {transform:translateY(-50px); opacity:0;} to {transform:translateY(0); opacity:1;} }
+</style>
+</head>
+<body>
+
+<header id="header">
+    <nav>
+        <ul>
+            <li><a href="#hero" class="nav-link">Home</a></li>
+            <li><a href="#about" class="nav-link">About Us</a></li>
+            <li><a href="#contact" class="nav-link">Contact Us</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section id="hero">
+    <div class="content">
+        <h1>Find Your Perfect PG 🏡</h1>
+        <p>Verified PGs, easy booking, hassle-free living. Perfect for students everywhere.</p>
+        <a href="login.html" class="cta-btn">Login</a>
+                <a href="signup.html" class="cta-btn">Sign Up</a>
+
+    </div>
+</section>
+
+<section id="about">
+    <h2>Why PG Buddie?</h2>
+    <div class="cards">
+        <div class="card"><i>🌟</i><h3>Student Friendly</h3><p>We focus on PGs that fit student’s budgets and lifestyle.</p></div>
+        <div class="card"><i>✔️</i><h3>Verified Listings</h3><p>All PGs are verified by our team.</p></div>
+        <div class="card"><i>⚡</i><h3>Easy Booking</h3><p>Book your PG online in a few clicks.</p></div>
+        <div class="card"><i>👤</i><h3>Seamless</h3><p>Stay updated about notices from owners.</p></div>
+        <div class="card"><i>⌨️🔗</i><h3>Community</h3><p>Stay in touch with your PGmates.</p></div>
+        <div class="card"><i>💬</i><h3>24/7 Support</h3><p>Always available to answer your queries instantly.</p></div>
+    </div>
+</section>
+
+
+<!-- ===== Contact ===== -->
+<section id="contact">
+    <h2>Contact Us</h2>
+    <div class="cards">
+        <div class="card">
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i>📧</i>
+                    <h3>Email</h3>
+                    <p>support@pgfinder.com</p>
+                </div>
+                <div class="contact-item">
+                    <i>📞</i>
+                    <h3>Phone</h3>
+                    <p>+91 12345 67890</p>
+                </div>
+                <div class="contact-item">
+                    <i>📍</i>
+                    <h3>Location</h3>
+                    <p>123 Street, Student City, India</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer>
+    <p>© 2025 PG Finder. All rights reserved.</p>
+    <div class="social">
+        <a href="#">🌐</a>
+        <a href="#">🐦</a>
+        <a href="#">📸</a>
+    </div>
+</footer>
+
+<script>
+
+// ===== Prevent logged-in users from seeing the login page =====
+const API_BASE_URL = 'http://localhost:5000';
+
+async function handleLoginNavigation(event) {
+    event.preventDefault();
+
+    const href = event.currentTarget.getAttribute('href');
+    const token = localStorage.getItem('pgBuddieToken');
+
+    // No token → continue normally to login.html
+    if (!token) {
+        window.location.href = href;
+        return;
+    }
+
+    try {
+        // Verify that the token is still valid
+        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            // Token is expired/invalid
+            localStorage.removeItem('pgBuddieToken');
+            localStorage.removeItem('pgBuddieUser');
+
+            window.location.href = href;
+            return;
+        }
+
+        const data = await response.json();
+
+        // Token is valid → don't ask for credentials again
+        if (data.user.role === 'student') {
+            window.location.href = 'studenthome.html';
+        } else if (data.user.role === 'owner') {
+            window.location.href = 'ownerdashboard.html';
+        } else {
+            // Unknown role
+            localStorage.removeItem('pgBuddieToken');
+            localStorage.removeItem('pgBuddieUser');
+
+            window.location.href = href;
+        }
+
+    } catch (error) {
+        console.error('Unable to verify login:', error);
+
+        // If backend is unavailable, don't assume the user is logged in.
+        window.location.href = href;
+    }
+}
+
+// ===== Handle Login links =====
+document.querySelectorAll('a[href="login.html"]').forEach(link => {
+    link.addEventListener('click', handleLoginNavigation);
+});
+
+
+
+
+
+// Smooth scroll for nav links
+const headerHeight = document.getElementById('header').offsetHeight;
+document.querySelectorAll('a.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        window.scrollTo({ top: target.offsetTop - headerHeight, behavior: 'smooth' });
+    });
+});
+
+// Reveal cards
+const cards = document.querySelectorAll('.card');
+const revealOnScroll = () => { cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    if(rect.top < window.innerHeight - 100){ card.classList.add('visible'); }
+})};
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+
+// 🔥 Wet AF page transition
+//document.querySelectorAll('a.cta-btn, nav ul li a[href$=".html"]').forEach(link => {
+document.querySelectorAll(
+    'a.cta-btn:not([href="login.html"]), nav ul li a[href$=".html"]:not([href="login.html"])'
+).forEach(link => {
+    link.addEventListener('click', function(e){
+        e.preventDefault();
+        const href = this.getAttribute('href');
+
+        // Overlay with glow + blur
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0'; overlay.style.left = '0';
+        overlay.style.width = '100vw'; overlay.style.height = '100vh';
+        overlay.style.background = 'linear-gradient(135deg, rgba(102,166,255,0.7), rgba(137,247,254,0.7))';
+        overlay.style.backdropFilter = 'blur(10px) brightness(1.2)';
+        overlay.style.transition = 'all 1s ease';
+        overlay.style.zIndex = '9999';
+        overlay.style.opacity = '0';
+        document.body.appendChild(overlay);
+
+        // Animate overlay in
+        requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+
+        // Animate body scale + blur
+        document.body.style.transition = 'all 1s ease';
+        document.body.style.transform = 'scale(0.85)';
+        document.body.style.filter = 'blur(6px) brightness(0.8) drop-shadow(0 0 50px rgba(0,0,0,0.5))';
+
+        setTimeout(() => { window.location.href = href; }, 1000);
+    });
+});
+</script>
+
+<!--<script>
+// ============================================================
+// PG BUDDIE - WELCOME PAGE
+// ============================================================
+
+const API_BASE_URL = 'http://localhost:5000';
+
+
+// ============================================================
+// SMOOTH SCROLL
+// ============================================================
+
+const headerHeight = document.getElementById('header').offsetHeight;
+
+document.querySelectorAll('a.nav-link').forEach(link => {
+    link.addEventListener('click', e => {
+        e.preventDefault();
+
+        const target = document.querySelector(
+            link.getAttribute('href')
+        );
+
+        if (target) {
+            window.scrollTo({
+                top: target.offsetTop - headerHeight,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+
+// ============================================================
+// REVEAL CARDS
+// ============================================================
+
+const cards = document.querySelectorAll('.card');
+
+const revealOnScroll = () => {
+
+    cards.forEach(card => {
+
+        const rect = card.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight - 100) {
+            card.classList.add('visible');
+        }
+
+    });
+
+};
+
+window.addEventListener('scroll', revealOnScroll);
+
+revealOnScroll();
+
+
+// ============================================================
+// PAGE TRANSITION
+// ============================================================
+
+function animateAndNavigate(href) {
+
+    const overlay = document.createElement('div');
+
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+
+    overlay.style.background =
+        'linear-gradient(135deg, rgba(102,166,255,0.7), rgba(137,247,254,0.7))';
+
+    overlay.style.backdropFilter =
+        'blur(10px) brightness(1.2)';
+
+    overlay.style.transition =
+        'all 1s ease';
+
+    overlay.style.zIndex = '9999';
+    overlay.style.opacity = '0';
+
+    document.body.appendChild(overlay);
+
+
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+    });
+
+
+    document.body.style.transition =
+        'all 1s ease';
+
+    document.body.style.transform =
+        'scale(0.85)';
+
+    document.body.style.filter =
+        'blur(6px) brightness(0.8) drop-shadow(0 0 50px rgba(0,0,0,0.5))';
+
+
+    setTimeout(() => {
+
+        window.location.href = href;
+
+    }, 1000);
+
+}
+
+
+// ============================================================
+// CHECK WHETHER USER IS ALREADY LOGGED IN
+// ============================================================
+
+async function getLoggedInUser() {
+
+    const token =
+        localStorage.getItem('pgBuddieToken');
+
+    // No token means the user really needs to log in.
+    if (!token) {
+        return null;
+    }
+
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/api/auth/me`,
+            {
+                method: 'GET',
+
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+
+        if (!response.ok) {
+
+            // Token exists but is no longer valid.
+            localStorage.removeItem('pgBuddieToken');
+            localStorage.removeItem('pgBuddieUser');
+
+            return null;
+        }
+
+
+        const data = await response.json();
+
+
+        if (!data.user) {
+
+            localStorage.removeItem('pgBuddieToken');
+            localStorage.removeItem('pgBuddieUser');
+
+            return null;
+        }
+
+
+        // Keep frontend user information fresh.
+        localStorage.setItem(
+            'pgBuddieUser',
+            JSON.stringify(data.user)
+        );
+
+
+        return data.user;
+
+    } catch (error) {
+
+        console.error(
+            'Unable to verify existing login:',
+            error
+        );
+
+        /*
+          Important:
+
+          If the backend is temporarily unavailable,
+          don't destroy the user's valid token.
+
+          Just allow them to go to the normal login page.
+        */
+
+        return null;
+    }
+
+}
+
+
+// ============================================================
+// HANDLE LOGIN CLICK
+// ============================================================
+
+async function handleLoginClick(e) {
+
+    e.preventDefault();
+
+
+    const user =
+        await getLoggedInUser();
+
+
+    // --------------------------------------------------------
+    // Already authenticated
+    // --------------------------------------------------------
+
+    if (user) {
+
+        if (user.role === 'student') {
+
+            animateAndNavigate(
+                'studenthome.html'
+            );
+
+            return;
+        }
+
+
+        if (user.role === 'owner') {
+
+            animateAndNavigate(
+                'ownerdashboard.html'
+            );
+
+            return;
+        }
+
+
+        // Unknown/unsupported role.
+        console.warn(
+            'Unsupported user role:',
+            user.role
+        );
+
+        return;
+    }
+
+
+    // --------------------------------------------------------
+    // Not authenticated
+    // --------------------------------------------------------
+
+    animateAndNavigate(
+        'login.html'
+    );
+
+}
+
+
+// ============================================================
+// ATTACH NAVIGATION HANDLERS
+// ============================================================
+
+document.querySelectorAll(
+    'nav ul li a'
+).forEach(link => {
+
+    const href =
+        link.getAttribute('href');
+
+
+    // Login link gets special authentication handling.
+    if (href === 'login.html') {
+
+        link.addEventListener(
+            'click',
+            handleLoginClick
+        );
+
+        return;
+    }
+
+
+    // Everything else keeps the existing transition.
+    link.addEventListener(
+        'click',
+        function(e) {
+
+            e.preventDefault();
+
+            const targetURL =
+                this.getAttribute('href');
+
+            animateAndNavigate(
+                targetURL
+            );
+
+        }
+    );
+
+});
+
+
+// ============================================================
+// HERO LOGIN BUTTON
+// ============================================================
+
+document.querySelectorAll(
+    'a.cta-btn'
+).forEach(button => {
+
+    const href =
+        button.getAttribute('href');
+
+
+    if (href === 'login.html') {
+
+        button.addEventListener(
+            'click',
+            handleLoginClick
+        );
+
+        return;
+    }
+
+
+    button.addEventListener(
+        'click',
+        function(e) {
+
+            e.preventDefault();
+
+            animateAndNavigate(
+                this.getAttribute('href')
+            );
+
+        }
+    );
+
+});
+</script>-->
+</body>
+</html>

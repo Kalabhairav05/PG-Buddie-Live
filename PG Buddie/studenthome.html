@@ -1,0 +1,3675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>PG Buddie - Student Dashboard</title>
+
+  <!-- =====================================================
+       EXISTING THEME
+       ===================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="home.css"
+  >
+
+
+  <!-- =====================================================
+       LEAFLET MAP
+       ===================================================== -->
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  >
+
+
+  <style>
+
+    /* =====================================================
+       AUTH LOADING
+       ===================================================== */
+
+    body.auth-pending {
+      visibility: hidden;
+    }
+
+    body.auth-ready {
+      visibility: visible;
+    }
+
+
+    /* =====================================================
+       ANIMATIONS
+       ===================================================== */
+
+    @keyframes fadeIn {
+
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+
+    }
+
+
+    @keyframes fadeInUp {
+
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+    }
+
+
+    @keyframes placeholderFade {
+
+      0% {
+        opacity: 0.35;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.35;
+      }
+
+    }
+
+
+    @keyframes filterModalIn {
+
+      from {
+        opacity: 0;
+        transform:
+          translateY(18px)
+          scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform:
+          translateY(0)
+          scale(1);
+      }
+
+    }
+
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    header {
+
+      position: sticky;
+      top: 0;
+      z-index: 100;
+
+      box-shadow:
+        0 3px 10px
+        rgba(0,0,0,0.08);
+
+      animation:
+        fadeIn
+        0.8s
+        ease-in-out
+        forwards;
+
+    }
+
+
+    /* =====================================================
+       WELCOME
+       ===================================================== */
+
+    .welcome {
+
+      opacity: 0;
+
+      animation:
+        fadeInUp
+        0.8s
+        ease-out
+        0.1s
+        forwards;
+
+    }
+
+
+    .welcome h2 {
+      text-align: center;
+    }
+
+
+    .welcome p {
+
+      text-align: center;
+      width: 100%;
+
+    }
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    .student-search {
+
+      width: 100%;
+      max-width: 900px;
+
+      margin:
+        22px auto 12px;
+
+      padding:
+        0 20px;
+
+      box-sizing:
+        border-box;
+
+      opacity: 0;
+
+      animation:
+        fadeInUp
+        0.8s
+        ease-out
+        0.25s
+        forwards;
+
+    }
+
+
+    .search-pill-wrap {
+
+      width: 100%;
+      max-width: 760px;
+
+      margin:
+        0 auto;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 10px;
+
+    }
+
+
+    .search-pill {
+
+      width: 100%;
+      max-width: 620px;
+
+      height: 48px;
+
+      display: flex;
+
+      align-items: center;
+
+      background:
+        rgba(255,255,255,0.97);
+
+      border:
+        1px solid
+        rgba(255,255,255,0.9);
+
+      border-radius: 999px;
+
+      box-shadow:
+        0 7px 20px
+        rgba(0,0,0,0.08);
+
+      overflow: hidden;
+
+      transition:
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+
+    }
+
+
+    .search-pill:focus-within {
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 10px 26px
+        rgba(0,0,0,0.12);
+
+    }
+
+
+    .search-icon {
+
+      margin-left: 16px;
+
+      font-size: 17px;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .search-pill input {
+
+      flex: 1;
+
+      min-width: 0;
+
+      height: 100%;
+
+      border: none;
+
+      outline: none;
+
+      background: transparent;
+
+      padding:
+        0 10px;
+
+      font-size: 15px;
+
+      color: #333;
+
+    }
+
+
+    .search-pill input::placeholder {
+
+      color: #777;
+
+    }
+
+
+    .search-pill
+    input.placeholder-changing {
+
+      animation:
+        placeholderFade
+        0.6s
+        ease;
+
+    }
+
+
+    /* =====================================================
+       SEARCH BUTTON
+       ===================================================== */
+
+    .search-submit {
+
+      height: 36px;
+
+      margin-right: 6px;
+
+      padding:
+        0 17px;
+
+      border: none;
+
+      border-radius: 999px;
+
+      background:
+        #66a6ff;
+
+      color: white;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .search-submit:hover {
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 5px 14px
+        rgba(102,166,255,0.30);
+
+    }
+
+
+    /* =====================================================
+       FILTER BUTTON
+       ===================================================== */
+
+    .filter-pill {
+
+      height: 48px;
+
+      padding:
+        0 16px;
+
+      border:
+        1px solid
+        rgba(255,255,255,0.85);
+
+      border-radius: 999px;
+
+      background:
+        rgba(255,255,255,0.97);
+
+      color:
+        #3d69a5;
+
+      font-weight: 700;
+
+      font-size: 14px;
+
+      cursor: pointer;
+
+      display: inline-flex;
+
+      align-items: center;
+      justify-content: center;
+
+      gap: 7px;
+
+      box-shadow:
+        0 7px 20px
+        rgba(0,0,0,0.07);
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+      white-space: nowrap;
+
+      flex-shrink: 0;
+
+    }
+
+
+    .filter-pill:hover {
+
+      transform:
+        translateY(-2px);
+
+      box-shadow:
+        0 10px 24px
+        rgba(0,0,0,0.11);
+
+    }
+
+
+    .filter-badge {
+
+      display: none;
+
+      min-width: 20px;
+
+      height: 20px;
+
+      padding:
+        0 5px;
+
+      border-radius: 999px;
+
+      align-items: center;
+      justify-content: center;
+
+      background:
+        #66a6ff;
+
+      color: white;
+
+      font-size: 11px;
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       SEARCH STATUS
+       ===================================================== */
+
+    .pg-search-status {
+
+      text-align: center;
+
+      min-height: 20px;
+
+      margin-top: 8px;
+
+      font-size: 13px;
+
+      color:
+        rgba(40,40,40,0.68);
+
+    }
+
+
+    /* =====================================================
+       PG LISTINGS
+       ===================================================== */
+
+    .pg-listings {
+
+      width: 100%;
+
+      max-width: 1200px;
+
+      margin:
+        25px auto 40px;
+
+      padding:
+        0 20px;
+
+      box-sizing:
+        border-box;
+
+    }
+
+
+    .pg-listings h2 {
+
+      text-align: center;
+
+      color: #333;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .pg-cards {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(260px,1fr)
+        );
+
+      gap: 22px;
+
+    }
+
+
+    .pg-card {
+
+      background:
+        rgba(255,255,255,0.96);
+
+      border-radius:
+        16px;
+
+      overflow:
+        hidden;
+
+      box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.08);
+
+      opacity: 0;
+
+      animation:
+        fadeInUp
+        0.65s
+        ease
+        forwards;
+
+      transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease;
+
+    }
+
+
+    .pg-card:hover {
+
+      transform:
+        translateY(-7px);
+
+      box-shadow:
+        0 14px 32px
+        rgba(0,0,0,0.14);
+
+    }
+
+
+    .pg-card-image {
+
+      width: 100%;
+
+      height: 190px;
+
+      object-fit: cover;
+
+      display: block;
+
+    }
+
+
+    .pg-card-content {
+
+      padding:
+        17px;
+
+    }
+
+
+    .pg-card-title {
+
+      margin:
+        0 0 7px;
+
+      font-size:
+        1.15rem;
+
+      color:
+        #26384f;
+
+    }
+
+
+    .pg-card-description {
+
+      color:
+        #666;
+
+      font-size:
+        0.9rem;
+
+      line-height:
+        1.45;
+
+      min-height:
+        42px;
+
+      margin-bottom:
+        9px;
+
+    }
+
+
+    .pg-card-meta {
+
+      display:
+        flex;
+
+      flex-wrap:
+        wrap;
+
+      gap:
+        7px;
+
+      margin:
+        8px 0;
+
+      font-size:
+        0.82rem;
+
+      color:
+        #666;
+
+    }
+
+
+    .pg-card-meta span {
+
+      white-space:
+        nowrap;
+
+    }
+
+
+    .pg-card-rent {
+
+      font-weight:
+        800;
+
+      color:
+        #4f8ddd;
+
+      font-size:
+        1rem;
+
+      margin-top:
+        8px;
+
+    }
+
+
+    .pg-card-actions {
+
+      margin-top:
+        14px;
+
+      display:
+        flex;
+
+      justify-content:
+        flex-end;
+
+    }
+
+
+    .view-pg-btn {
+
+      border:
+        none;
+
+      background:
+        #66a6ff;
+
+      color:
+        white;
+
+      padding:
+        9px 15px;
+
+      border-radius:
+        999px;
+
+      cursor:
+        pointer;
+
+      font-weight:
+        700;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+    }
+
+
+    .view-pg-btn:hover {
+
+      transform:
+        translateY(-1px);
+
+      box-shadow:
+        0 5px 14px
+        rgba(102,166,255,0.25);
+
+    }
+
+
+    .pg-empty-state {
+
+      grid-column:
+        1 / -1;
+
+      text-align:
+        center;
+
+      padding:
+        55px 20px;
+
+      color:
+        #555;
+
+    }
+
+
+    .pg-empty-icon {
+
+      font-size:
+        38px;
+
+      margin-bottom:
+        8px;
+
+    }
+
+
+    /* =====================================================
+       FILTER MODAL
+       ===================================================== */
+
+    .filter-modal {
+
+      position:
+        fixed;
+
+      inset:
+        0;
+
+      z-index:
+        10000;
+
+      display:
+        none;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      padding:
+        20px;
+
+      background:
+        rgba(20,35,55,0.42);
+
+      backdrop-filter:
+        blur(7px);
+
+    }
+
+
+    .filter-modal.show {
+
+      display:
+        flex;
+
+    }
+
+
+    .filter-card {
+
+      width:
+        min(680px,94vw);
+
+      max-height:
+        88vh;
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      background:
+        rgba(255,255,255,0.98);
+
+      border-radius:
+        20px;
+
+      overflow:
+        hidden;
+
+      box-shadow:
+        0 30px 80px
+        rgba(0,0,0,0.20);
+
+      animation:
+        filterModalIn
+        0.28s
+        ease-out;
+
+    }
+
+
+    .filter-header {
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      padding:
+        20px 23px 15px;
+
+      border-bottom:
+        1px solid
+        rgba(0,0,0,0.06);
+
+    }
+
+
+    .filter-header h2 {
+
+      margin:
+        0;
+
+      color:
+        #26384f;
+
+      font-size:
+        1.3rem;
+
+    }
+
+
+    .filter-header p {
+
+      margin:
+        4px 0 0;
+
+      color:
+        #777;
+
+      font-size:
+        0.86rem;
+
+    }
+
+
+    .filter-close {
+
+      width:
+        36px;
+
+      height:
+        36px;
+
+      border:
+        none;
+
+      border-radius:
+        50%;
+
+      background:
+        #f3f6fa;
+
+      color:
+        #555;
+
+      font-size:
+        23px;
+
+      cursor:
+        pointer;
+
+    }
+
+
+    .filter-body {
+
+      overflow-y:
+        auto;
+
+      padding:
+        5px 23px 18px;
+
+    }
+
+
+    .filter-section {
+
+      padding:
+        15px 0;
+
+      border-bottom:
+        1px solid
+        rgba(0,0,0,0.055);
+
+    }
+
+
+    .filter-section:last-child {
+
+      border-bottom:
+        none;
+
+    }
+
+
+    .filter-section-title {
+
+      font-weight:
+        800;
+
+      color:
+        #30445e;
+
+      margin-bottom:
+        11px;
+
+    }
+
+
+    .filter-grid {
+
+      display:
+        grid;
+
+      grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+      gap:
+        11px;
+
+    }
+
+
+    .filter-field {
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        5px;
+
+    }
+
+
+    .filter-field label {
+
+      font-size:
+        0.82rem;
+
+      font-weight:
+        700;
+
+      color:
+        #555;
+
+    }
+
+
+    .filter-field input,
+    .filter-field select {
+
+      width:
+        100%;
+
+      height:
+        42px;
+
+      box-sizing:
+        border-box;
+
+      border:
+        1px solid
+        #dfe4ea;
+
+      border-radius:
+        9px;
+
+      padding:
+        0 11px;
+
+      outline:
+        none;
+
+      background:
+        white;
+
+      color:
+        #333;
+
+      font-size:
+        0.9rem;
+
+    }
+
+
+    .filter-field input:focus,
+    .filter-field select:focus {
+
+      border-color:
+        #66a6ff;
+
+      box-shadow:
+        0 0 0 3px
+        rgba(102,166,255,0.10);
+
+    }
+
+
+    .filter-field small {
+
+      color:
+        #888;
+
+      font-size:
+        0.75rem;
+
+    }
+
+
+    .location-choice {
+
+      margin-top:
+        12px;
+
+      width:
+        100%;
+
+      height:
+        42px;
+
+      border:
+        none;
+
+      border-radius:
+        9px;
+
+      background:
+        #edf5ff;
+
+      color:
+        #3d69a5;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+    }
+
+
+    .location-status {
+
+      margin-top:
+        8px;
+
+      font-size:
+        0.78rem;
+
+      color:
+        #777;
+
+    }
+
+
+    .availability-toggle {
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      gap:
+        9px;
+
+      cursor:
+        pointer;
+
+      color:
+        #444;
+
+      font-size:
+        0.9rem;
+
+    }
+
+
+    .filter-footer {
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        12px;
+
+      padding:
+        14px 23px;
+
+      border-top:
+        1px solid
+        rgba(0,0,0,0.06);
+
+    }
+
+
+    .filter-footer-right {
+
+      display:
+        flex;
+
+      gap:
+        9px;
+
+    }
+
+
+    .filter-reset,
+    .filter-cancel,
+    .filter-apply {
+
+      border:
+        none;
+
+      border-radius:
+        999px;
+
+      padding:
+        9px 15px;
+
+      cursor:
+        pointer;
+
+      font-weight:
+        700;
+
+    }
+
+
+    .filter-reset {
+
+      background:
+        transparent;
+
+      color:
+        #777;
+
+    }
+
+
+    .filter-cancel {
+
+      background:
+        #eef1f5;
+
+      color:
+        #555;
+
+    }
+
+
+    .filter-apply {
+
+      background:
+        #66a6ff;
+
+      color:
+        white;
+
+    }
+
+
+    /* =====================================================
+       PG DETAILS MODAL
+       ===================================================== */
+
+    .modal {
+
+      position:
+        fixed;
+
+      inset:
+        0;
+
+      z-index:
+        11000;
+
+      display:
+        none;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      padding:
+        20px;
+
+      background:
+        rgba(0,0,0,0.48);
+
+      backdrop-filter:
+        blur(5px);
+
+    }
+
+
+    .modal.show {
+
+      display:
+        flex;
+
+    }
+
+
+    .modal-card {
+
+      position:
+        relative;
+
+      width:
+        min(900px,95vw);
+
+      max-height:
+        90vh;
+
+      overflow-y:
+        auto;
+
+      display:
+        grid;
+
+      grid-template-columns:
+        minmax(0,1fr)
+        minmax(0,1fr);
+
+      gap:
+        25px;
+
+      padding:
+        24px;
+
+      background:
+        white;
+
+      border-radius:
+        20px;
+
+      box-shadow:
+        0 30px 80px
+        rgba(0,0,0,0.22);
+
+    }
+
+
+    .close-x {
+
+      position:
+        absolute;
+
+      top:
+        12px;
+
+      right:
+        12px;
+
+      z-index:
+        2;
+
+      width:
+        36px;
+
+      height:
+        36px;
+
+      border:
+        none;
+
+      border-radius:
+        50%;
+
+      background:
+        rgba(255,255,255,0.9);
+
+      font-size:
+        23px;
+
+      cursor:
+        pointer;
+
+    }
+
+
+    .modal-left img {
+
+      width:
+        100%;
+
+      height:
+        300px;
+
+      object-fit:
+        cover;
+
+      border-radius:
+        14px;
+
+      background:
+        #eef2f6;
+
+    }
+
+
+    .modal-right {
+
+      display:
+        flex;
+
+      flex-direction:
+        column;
+
+      gap:
+        15px;
+
+    }
+
+
+    .modal-title {
+
+      font-size:
+        1.5rem;
+
+      font-weight:
+        800;
+
+      color:
+        #26384f;
+
+    }
+
+
+    .modal-desc {
+
+      margin-top:
+        8px;
+
+      color:
+        #666;
+
+      line-height:
+        1.5;
+
+    }
+
+
+    .modal-row {
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        15px;
+
+    }
+
+
+    .modal-rent {
+
+      font-weight:
+        800;
+
+      color:
+        #4f8ddd;
+
+      font-size:
+        1.1rem;
+
+    }
+
+
+    .contact {
+
+      color:
+        #666;
+
+      font-size:
+        0.9rem;
+
+    }
+
+
+    .amenities {
+
+      display:
+        flex;
+
+      flex-wrap:
+        wrap;
+
+      gap:
+        7px;
+
+      list-style:
+        none;
+
+      padding:
+        0;
+
+      margin:
+        0;
+
+    }
+
+
+    .amenities li {
+
+      background:
+        #edf5ff;
+
+      color:
+        #3d69a5;
+
+      padding:
+        6px 9px;
+
+      border-radius:
+        999px;
+
+      font-size:
+        0.8rem;
+
+    }
+
+
+    .modal-actions,
+    .booking-actions {
+
+      display:
+        flex;
+
+      gap:
+        9px;
+
+      flex-wrap:
+        wrap;
+
+    }
+
+
+    .btn {
+
+      border:
+        none;
+
+      border-radius:
+        999px;
+
+      padding:
+        10px 17px;
+
+      background:
+        #66a6ff;
+
+      color:
+        white;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+    }
+
+
+    .btn.secondary {
+
+      background:
+        #eef1f5;
+
+      color:
+        #555;
+
+    }
+
+
+    .booking-panel {
+
+      padding:
+        15px;
+
+      border-radius:
+        12px;
+
+      background:
+        #f6f8fb;
+
+    }
+
+
+    #bookDate {
+
+      width:
+        100%;
+
+      box-sizing:
+        border-box;
+
+      height:
+        42px;
+
+      border:
+        1px solid
+        #dfe4ea;
+
+      border-radius:
+        9px;
+
+      padding:
+        0 10px;
+
+      margin:
+        7px 0 12px;
+
+    }
+
+
+    .success-msg {
+
+      display:
+        none;
+
+      margin-top:
+        10px;
+
+      color:
+        #26834d;
+
+      font-weight:
+        700;
+
+    }
+
+
+    /* =====================================================
+       MAP
+       ===================================================== */
+
+    .student-map-section {
+
+      width:
+        min(1200px, calc(100% - 40px));
+
+      margin:
+        10px auto 50px;
+
+    }
+
+
+    .student-map-card {
+
+      background:
+        rgba(255,255,255,0.96);
+
+      border-radius:
+        18px;
+
+      overflow:
+        hidden;
+
+      box-shadow:
+        0 8px 25px
+        rgba(0,0,0,0.08);
+
+    }
+
+
+    .student-map-header {
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      gap:
+        15px;
+
+      padding:
+        18px 20px;
+
+    }
+
+
+    .student-map-header h2 {
+
+      margin:
+        0;
+
+      color:
+        #26384f;
+
+    }
+
+
+    .student-map-header p {
+
+      margin:
+        5px 0 0;
+
+      color:
+        #777;
+
+      font-size:
+        0.88rem;
+
+    }
+
+
+    #studentPGMap {
+
+      width:
+        100%;
+
+      height:
+        430px;
+
+    }
+
+
+    /* =====================================================
+       CUSTOM PG MAP MARKER
+       ===================================================== */
+
+    .pg-map-marker {
+
+      background:
+        transparent;
+
+      border:
+        none;
+
+    }
+
+
+    .pg-map-pin-wrapper {
+
+      position:
+        relative;
+
+      width:
+        42px;
+
+      height:
+        50px;
+
+    }
+
+
+    .pg-map-pin {
+
+      position:
+        absolute;
+
+      left:
+        2px;
+
+      top:
+        8px;
+
+      width:
+        36px;
+
+      height:
+        36px;
+
+      border-radius:
+        50% 50% 50% 0;
+
+      transform:
+        rotate(-45deg);
+
+      background:
+        #66a6ff;
+
+      border:
+        3px solid white;
+
+      box-shadow:
+        0 4px 12px
+        rgba(0,0,0,0.28);
+
+    }
+
+
+    .pg-map-pin-icon {
+
+      position:
+        absolute;
+
+      inset:
+        0;
+
+      display:
+        flex;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
+
+      transform:
+        rotate(45deg);
+
+      color:
+        white;
+
+      font-size:
+        17px;
+
+    }
+
+
+    .pg-map-label {
+
+      position:
+        absolute;
+
+      left:
+        50%;
+
+      bottom:
+        48px;
+
+      transform:
+        translateX(-50%);
+
+      white-space:
+        nowrap;
+
+      background:
+        white;
+
+      color:
+        #26384f;
+
+      padding:
+        5px 9px;
+
+      border-radius:
+        8px;
+
+      font-size:
+        12px;
+
+      font-weight:
+        800;
+
+      box-shadow:
+        0 3px 12px
+        rgba(0,0,0,0.18);
+
+      border:
+        1px solid
+        rgba(0,0,0,0.08);
+
+    }
+
+
+    .pg-popup-name {
+
+      font-weight:
+        800;
+
+      font-size:
+        15px;
+
+      color:
+        #26384f;
+
+      margin-bottom:
+        5px;
+
+    }
+
+
+    .pg-popup-address {
+
+      color:
+        #666;
+
+      font-size:
+        13px;
+
+      line-height:
+        1.4;
+
+    }
+
+
+    .pg-popup-distance {
+
+      margin-top:
+        5px;
+
+      color:
+        #4f8ddd;
+
+      font-size:
+        12px;
+
+      font-weight:
+        700;
+
+    }
+
+
+    .pg-popup-button {
+
+      margin-top:
+        10px;
+
+      border:
+        none;
+
+      border-radius:
+        999px;
+
+      padding:
+        7px 13px;
+
+      background:
+        #66a6ff;
+
+      color:
+        white;
+
+      font-weight:
+        700;
+
+      cursor:
+        pointer;
+
+    }
+
+
+    @media (max-width: 700px) {
+
+      .search-pill-wrap {
+
+        align-items:
+          stretch;
+
+      }
+
+
+      .filter-pill {
+
+        padding:
+          0 13px;
+
+      }
+
+
+      .filter-grid {
+
+        grid-template-columns:
+          1fr;
+
+      }
+
+
+      .modal-card {
+
+        grid-template-columns:
+          1fr;
+
+        padding:
+          18px;
+
+      }
+
+
+      .modal-left img {
+
+        height:
+          220px;
+
+      }
+
+
+      .student-map-section {
+
+        width:
+          calc(100% - 20px);
+
+      }
+
+
+      #studentPGMap {
+
+        height:
+          350px;
+
+      }
+
+
+      .student-map-header {
+
+        align-items:
+          flex-start;
+
+        flex-direction:
+          column;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body class="auth-pending">
+
+
+<!-- =====================================================
+     HEADER
+     ===================================================== -->
+
+<header>
+
+  <div class="logo">
+    PG Buddie
+  </div>
+
+
+  <nav>
+
+    <a href="hybridwelcomepage.html">
+      Home
+    </a>
+
+    <a href="bookings.html">
+      Bookings
+    </a>
+
+    <a href="myresidence.html">
+      My residence
+    </a>
+
+    <a href="studentprofile.html">
+      Profile
+    </a>
+
+    <a
+      href="login.html"
+      id="logoutBtn"
+    >
+      Logout
+    </a>
+
+  </nav>
+
+</header>
+
+
+<!-- =====================================================
+     WELCOME
+     ===================================================== -->
+
+<section class="welcome">
+
+  <h2>
+
+    Welcome,
+
+    <span id="studentName">
+      Student
+    </span>
+
+    👋
+
+  </h2>
+
+
+  <p>
+    Find your ideal PG near your university with ease.
+  </p>
+
+</section>
+
+
+<!-- =====================================================
+     SEARCH
+     ===================================================== -->
+
+<section class="student-search">
+
+  <div class="search-pill-wrap">
+
+    <div class="search-pill">
+
+      <span class="search-icon">
+        🔎
+      </span>
+
+
+      <input
+        id="pgSearchInput"
+        type="search"
+        placeholder="Search by PG name..."
+        autocomplete="off"
+        aria-label="Search PGs"
+      >
+
+
+      <button
+        id="pgSearchBtn"
+        class="search-submit"
+        type="button"
+      >
+        Search
+      </button>
+
+    </div>
+
+
+    <button
+      id="filterBtn"
+      class="filter-pill"
+      type="button"
+    >
+
+      <span>
+        ⚙ Filters
+      </span>
+
+
+      <span
+        id="filterBadge"
+        class="filter-badge"
+      ></span>
+
+    </button>
+
+  </div>
+
+
+  <div
+    id="pgSearchStatus"
+    class="pg-search-status"
+    aria-live="polite"
+  >
+    Loading PGs...
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     PG LIST
+     ===================================================== -->
+
+<section class="pg-listings">
+
+  <h2>
+    Available PGs
+  </h2>
+
+
+  <div
+    class="pg-cards"
+    id="pgCards"
+  ></div>
+
+</section>
+
+
+<!-- =====================================================
+     MAP
+     ===================================================== -->
+
+<section class="student-map-section">
+
+  <div class="student-map-card">
+
+    <div class="student-map-header">
+
+      <div>
+
+        <h2>
+          PGs Near You
+        </h2>
+
+        <p>
+          Tap a PG marker to view its details.
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn secondary"
+        id="centerPGMapBtn"
+      >
+        📍 My Location
+      </button>
+
+    </div>
+
+
+    <div
+      id="studentPGMap"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     FILTER MODAL
+     ===================================================== -->
+
+<div
+  class="filter-modal"
+  id="filterModal"
+  aria-hidden="true"
+>
+
+  <div
+    class="filter-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="filterTitle"
+  >
+
+    <div class="filter-header">
+
+      <div>
+
+        <h2 id="filterTitle">
+          Find your perfect PG
+        </h2>
+
+        <p>
+          Choose what matters to you.
+        </p>
+
+      </div>
+
+
+      <button
+        id="filterClose"
+        class="filter-close"
+        type="button"
+        aria-label="Close filters"
+      >
+        &times;
+      </button>
+
+    </div>
+
+
+    <div
+      class="filter-body"
+      id="filterForm"
+    >
+
+
+      <!-- LOCATION -->
+
+      <div class="filter-section">
+
+        <div class="filter-section-title">
+          📍 Location
+        </div>
+
+
+        <div class="filter-grid">
+
+          <div class="filter-field">
+
+            <label for="filterCity">
+              City
+            </label>
+
+            <input
+              id="filterCity"
+              type="text"
+              placeholder="e.g. Tirupati"
+            >
+
+          </div>
+
+
+          <div class="filter-field">
+
+            <label for="filterRadius">
+              Radius (km)
+            </label>
+
+            <input
+              id="filterRadius"
+              type="number"
+              min="0.1"
+              step="0.1"
+              value="5"
+            >
+
+          </div>
+
+        </div>
+
+
+        <button
+          id="useLocationBtn"
+          class="location-choice"
+          type="button"
+        >
+          📍 Use my current location
+        </button>
+
+
+        <div
+          id="locationStatus"
+          class="location-status"
+        >
+          No location selected
+        </div>
+
+      </div>
+
+
+      <!-- ROOM -->
+
+      <div class="filter-section">
+
+        <div class="filter-section-title">
+          🛏 Room
+        </div>
+
+
+        <div class="filter-grid">
+
+          <div class="filter-field">
+
+            <label for="filterSharing">
+              Sharing
+            </label>
+
+            <input
+              id="filterSharing"
+              type="number"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              placeholder="e.g. 4"
+            >
+
+            <small>
+              Enter the number of students sharing.
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- RENT -->
+
+      <div class="filter-section">
+
+        <div class="filter-section-title">
+          💰 Monthly rent
+        </div>
+
+
+        <div class="filter-grid">
+
+          <div class="filter-field">
+
+            <label for="filterMinRent">
+              Minimum
+            </label>
+
+            <input
+              id="filterMinRent"
+              type="number"
+              min="0"
+              step="100"
+              placeholder="₹ Min"
+            >
+
+          </div>
+
+
+          <div class="filter-field">
+
+            <label for="filterMaxRent">
+              Maximum
+            </label>
+
+            <input
+              id="filterMaxRent"
+              type="number"
+              min="0"
+              step="100"
+              placeholder="₹ Max"
+            >
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- GENDER -->
+
+      <div class="filter-section">
+
+        <div class="filter-section-title">
+          👤 PG type
+        </div>
+
+
+        <div class="filter-field">
+
+          <label for="filterGender">
+            Gender
+          </label>
+
+
+          <select
+            id="filterGender"
+          >
+
+            <option value="">
+              Any
+            </option>
+
+            <option value="male">
+              Male
+            </option>
+
+            <option value="female">
+              Female
+            </option>
+
+            <option value="co-ed">
+              Co-ed
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- AMENITIES -->
+
+      <div class="filter-section">
+
+        <div class="filter-section-title">
+          ✨ Amenities
+        </div>
+
+
+        <div class="filter-field">
+
+          <label for="filterAmenities">
+            What do you need?
+          </label>
+
+
+          <input
+            id="filterAmenities"
+            type="text"
+            placeholder="WiFi, AC, laundry..."
+          >
+
+
+          <small>
+            Separate multiple amenities with commas.
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- AVAILABILITY -->
+
+      <div class="filter-section">
+
+        <label class="availability-toggle">
+
+          <input
+            id="filterAvailable"
+            type="checkbox"
+          >
+
+          <span>
+            Show only PGs with available beds
+          </span>
+
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- FILTER FOOTER -->
+
+    <div class="filter-footer">
+
+      <button
+        id="filterReset"
+        class="filter-reset"
+        type="button"
+      >
+        Reset
+      </button>
+
+
+      <div class="filter-footer-right">
+
+        <button
+          id="filterCancel"
+          class="filter-cancel"
+          type="button"
+        >
+          Cancel
+        </button>
+
+
+        <button
+          id="filterApply"
+          class="filter-apply"
+          type="button"
+        >
+          Show PGs
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     PG DETAILS MODAL
+     ===================================================== -->
+
+<div
+  class="modal"
+  id="pgModal"
+  aria-hidden="true"
+>
+
+  <div
+    class="modal-card"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+
+
+    <button
+      class="close-x"
+      id="modalClose"
+      type="button"
+      aria-label="Close modal"
+    >
+      &times;
+    </button>
+
+
+    <div class="modal-left">
+
+      <img
+        id="modalImg"
+        src=""
+        alt="PG Image"
+      >
+
+    </div>
+
+
+    <div class="modal-right">
+
+      <div>
+
+        <div
+          class="modal-title"
+          id="modalTitle"
+        >
+          PG Title
+        </div>
+
+
+        <div
+          class="modal-desc"
+          id="modalDesc"
+        >
+          Short description
+        </div>
+
+      </div>
+
+
+      <div class="modal-row">
+
+        <div class="modal-rent">
+
+          ₹<span id="modalRent">0</span>/mo
+
+        </div>
+
+
+        <div
+          class="contact"
+          id="modalContact"
+        >
+          Contact information
+        </div>
+
+      </div>
+
+
+      <ul
+        class="amenities"
+        id="modalAmenities"
+      ></ul>
+
+
+      <div class="modal-actions">
+
+        <button
+          class="btn"
+          id="openBooking"
+          type="button"
+        >
+          Book Now
+        </button>
+
+
+        <button
+          class="btn secondary"
+          id="closeSecondary"
+          type="button"
+        >
+          Close
+        </button>
+
+      </div>
+
+
+      <!-- BOOKING -->
+
+      <div
+        class="booking-panel"
+        id="bookingPanel"
+        style="display:none;"
+      >
+
+        <label for="bookDate">
+          Check-in date
+        </label>
+
+
+        <input
+          id="bookDate"
+          type="date"
+        >
+
+
+        <div class="booking-actions">
+
+          <button
+            class="btn"
+            id="submitBooking"
+            type="button"
+          >
+            Submit Booking
+          </button>
+
+
+          <button
+            class="btn secondary"
+            id="cancelBooking"
+            type="button"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <div
+          class="success-msg"
+          id="bookingSuccess"
+        >
+          Booking request sent!
+          We'll contact you shortly.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     LEAFLET
+     ===================================================== -->
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""
+></script>
+
+
+<!-- =====================================================
+     AUTHENTICATION
+     ===================================================== -->
+
+<script>
+
+  "use strict";
+
+
+  /*
+   * Keep the entire dashboard hidden until the
+   * backend confirms that the current token belongs
+   * to a student.
+   */
+
+  document.body.classList.add(
+    "auth-pending"
+  );
+
+
+  /*
+   * This promise is intentionally exposed globally.
+   *
+   * student.js waits for this authentication check
+   * before initializing the student dashboard.
+   */
+
+  window.studentAuthPromise =
+    (async function () {
+
+      const token =
+        localStorage.getItem(
+          "pgBuddieToken"
+        );
+
+
+      /*
+       * No token.
+       */
+
+      if (!token) {
+
+        window.location.replace(
+          "login.html"
+        );
+
+        return false;
+
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            "http://localhost:5000/api/auth/me",
+            {
+              method:
+                "GET",
+
+              headers: {
+                "Authorization":
+                  `Bearer ${token}`,
+
+                "Content-Type":
+                  "application/json"
+              },
+
+              cache:
+                "no-store"
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "Authentication failed."
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        /*
+         * Your backend may return either:
+         *
+         * { user: {...} }
+         *
+         * or
+         *
+         * {...}
+         */
+
+        const user =
+          data?.user || data;
+
+
+        /*
+         * STUDENT ONLY
+         */
+
+        if (
+          !user ||
+          user.role !== "student"
+        ) {
+
+          throw new Error(
+            "Student access required."
+          );
+
+        }
+
+
+        /*
+         * Keep authenticated user
+         * synchronized locally.
+         */
+
+        localStorage.setItem(
+          "pgBuddieUser",
+          JSON.stringify(user)
+        );
+
+
+        /*
+         * SHOW STUDENT NAME
+         */
+
+        const studentName =
+          document.getElementById(
+            "studentName"
+          );
+
+
+        if (studentName) {
+
+          studentName.textContent =
+            user.name ||
+            user.fullName ||
+            user.studentName ||
+            "Student";
+
+        }
+
+
+        /*
+         * Authentication succeeded.
+         */
+
+        document.body.classList.remove(
+          "auth-pending"
+        );
+
+        document.body.classList.add(
+          "auth-ready"
+        );
+
+
+        return true;
+
+
+      } catch (error) {
+
+        console.error(
+          "Student authentication failed:",
+          error
+        );
+
+
+        /*
+         * Remove invalid authentication.
+         */
+
+        localStorage.removeItem(
+          "pgBuddieToken"
+        );
+
+        localStorage.removeItem(
+          "pgBuddieUser"
+        );
+
+        localStorage.removeItem(
+          "studentEmail"
+        );
+
+
+        /*
+         * Send user back to login.
+         */
+
+        window.location.replace(
+          "login.html"
+        );
+
+
+        return false;
+
+      }
+
+    })();
+
+</script>
+
+
+<!-- =====================================================
+     STUDENT DASHBOARD JAVASCRIPT
+     ===================================================== -->
+
+<script src="student.js"></script>
+
+
+<!-- =====================================================
+     STUDENT MAP
+     ===================================================== -->
+
+<script>
+
+  "use strict";
+
+
+  let studentPGMap = null;
+
+  let studentPGMarkers = [];
+
+
+  /*
+   * HTML escaping for PG names and addresses.
+   */
+
+  function mapEscapeHTML(value) {
+
+    return String(
+      value ?? ""
+    )
+      .replaceAll(
+        "&",
+        "&amp;"
+      )
+      .replaceAll(
+        "<",
+        "&lt;"
+      )
+      .replaceAll(
+        ">",
+        "&gt;"
+      )
+      .replaceAll(
+        '"',
+        "&quot;"
+      )
+      .replaceAll(
+        "'",
+        "&#039;"
+      );
+
+  }
+
+
+  /*
+   * Create the PG marker.
+   *
+   * The PG name is displayed directly above
+   * the house marker.
+   */
+
+  function createPGMapIcon(
+    pgName
+  ) {
+
+    const safeName =
+      mapEscapeHTML(
+        pgName ||
+        "PG"
+      );
+
+
+    return L.divIcon({
+
+      className:
+        "pg-map-marker",
+
+      html: `
+
+        <div class="pg-map-pin-wrapper">
+
+          <div class="pg-map-label">
+            ${safeName}
+          </div>
+
+          <div class="pg-map-pin">
+
+            <div class="pg-map-pin-icon">
+              🏠
+            </div>
+
+          </div>
+
+        </div>
+
+      `,
+
+      iconSize:
+        [42, 50],
+
+      iconAnchor:
+        [21, 50],
+
+      popupAnchor:
+        [0, -50]
+
+    });
+
+  }
+
+
+  /*
+   * Initialize Leaflet.
+   */
+
+  function initializeStudentPGMap() {
+
+    const mapElement =
+      document.getElementById(
+        "studentPGMap"
+      );
+
+
+    if (!mapElement) {
+
+      console.error(
+        "studentPGMap element not found."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      typeof L ===
+      "undefined"
+    ) {
+
+      console.error(
+        "Leaflet did not load."
+      );
+
+      return;
+
+    }
+
+
+    if (studentPGMap) {
+
+      return;
+
+    }
+
+
+    /*
+     * Initial India view.
+     *
+     * Once PGs arrive, the map automatically
+     * zooms to their real locations.
+     */
+
+    studentPGMap =
+      L.map(
+        "studentPGMap"
+      ).setView(
+        [
+          20.5937,
+          78.9629
+        ],
+        5
+      );
+
+
+    /*
+     * OpenStreetMap.
+     */
+
+    L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+
+        maxZoom:
+          19,
+
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+
+      }
+    ).addTo(
+      studentPGMap
+    );
+
+
+    setTimeout(
+      function () {
+
+        studentPGMap.invalidateSize();
+
+      },
+      250
+    );
+
+  }
+
+
+  /*
+   * Open the existing PG details modal.
+   *
+   * student.js will expose openPGModal().
+   */
+
+  function openPGFromMap(
+    pgId
+  ) {
+
+    if (
+      typeof window.openPGModal !==
+      "function"
+    ) {
+
+      console.error(
+        "student.js has not exposed openPGModal()."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      !Array.isArray(
+        window.studentPGs
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    const pg =
+      window.studentPGs.find(
+        item =>
+          String(
+            item._id
+          ) ===
+          String(pgId)
+      );
+
+
+    if (!pg) {
+
+      return;
+
+    }
+
+
+    window.openPGModal(
+      pg
+    );
+
+  }
+
+
+  /*
+   * Render PGs on the map.
+   */
+
+  function renderStudentPGMap(
+    pgs
+  ) {
+
+    if (
+      !studentPGMap
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * Clear previous markers.
+     */
+
+    studentPGMarkers.forEach(
+      marker => {
+
+        studentPGMap.removeLayer(
+          marker
+        );
+
+      }
+    );
+
+
+    studentPGMarkers = [];
+
+
+    if (
+      !Array.isArray(pgs)
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+     * Only PGs with real coordinates
+     * can appear on the map.
+     */
+
+    const validPGs =
+      pgs.filter(
+        pg => {
+
+          const latitude =
+            Number(
+              pg?.location?.latitude
+            );
+
+          const longitude =
+            Number(
+              pg?.location?.longitude
+            );
+
+
+          return (
+            Number.isFinite(
+              latitude
+            ) &&
+            Number.isFinite(
+              longitude
+            )
+          );
+
+        }
+      );
+
+
+    /*
+     * No coordinates.
+     */
+
+    if (
+      validPGs.length ===
+      0
+    ) {
+
+      studentPGMap.setView(
+        [
+          20.5937,
+          78.9629
+        ],
+        5
+      );
+
+      return;
+
+    }
+
+
+    const bounds =
+      L.latLngBounds([]);
+
+
+    validPGs.forEach(
+      pg => {
+
+        const latitude =
+          Number(
+            pg.location.latitude
+          );
+
+        const longitude =
+          Number(
+            pg.location.longitude
+          );
+
+
+        const marker =
+          L.marker(
+            [
+              latitude,
+              longitude
+            ],
+            {
+              icon:
+                createPGMapIcon(
+                  pg.name
+                )
+            }
+          );
+
+
+        /*
+         * Distance is supplied by the search
+         * endpoint when location search is used.
+         */
+
+        const distanceText =
+          Number.isFinite(
+            Number(
+              pg.distanceKm
+            )
+          )
+            ? `
+                <div class="pg-popup-distance">
+                  ${Number(
+                    pg.distanceKm
+                  ).toFixed(2)} km away
+                </div>
+              `
+            : "";
+
+
+        const address =
+          [
+            pg.address,
+            pg.city
+          ]
+          .filter(Boolean)
+          .join(", ");
+
+
+        const popupHTML = `
+
+          <div>
+
+            <div class="pg-popup-name">
+              ${mapEscapeHTML(
+                pg.name ||
+                "PG"
+              )}
+            </div>
+
+            <div class="pg-popup-address">
+              ${mapEscapeHTML(
+                address ||
+                "Location available"
+              )}
+            </div>
+
+            ${distanceText}
+
+            <button
+              type="button"
+              class="pg-popup-button"
+              data-pg-id="${mapEscapeHTML(
+                pg._id
+              )}"
+            >
+              View PG
+            </button>
+
+          </div>
+
+        `;
+
+
+        marker.bindPopup(
+          popupHTML
+        );
+
+
+        /*
+         * When popup opens, connect its
+         * View PG button.
+         */
+
+        marker.on(
+          "popupopen",
+          function(event) {
+
+            const popupElement =
+              event.popup.getElement();
+
+
+            if (!popupElement) {
+
+              return;
+
+            }
+
+
+            const button =
+              popupElement.querySelector(
+                ".pg-popup-button"
+              );
+
+
+            if (!button) {
+
+              return;
+
+            }
+
+
+            button.addEventListener(
+              "click",
+              function() {
+
+                openPGFromMap(
+                  button.dataset.pgId
+                );
+
+              }
+            );
+
+          }
+        );
+
+
+        marker.addTo(
+          studentPGMap
+        );
+
+
+        studentPGMarkers.push(
+          marker
+        );
+
+
+        bounds.extend(
+          [
+            latitude,
+            longitude
+          ]
+        );
+
+      }
+    );
+
+
+    /*
+     * Automatically frame all PGs.
+     */
+
+    if (
+      validPGs.length ===
+      1
+    ) {
+
+      const onlyPG =
+        validPGs[0];
+
+
+      studentPGMap.setView(
+        [
+          Number(
+            onlyPG.location.latitude
+          ),
+          Number(
+            onlyPG.location.longitude
+          )
+        ],
+        15
+      );
+
+    } else {
+
+      studentPGMap.fitBounds(
+        bounds,
+        {
+          padding:
+            [40,40]
+        }
+      );
+
+    }
+
+
+    setTimeout(
+      function() {
+
+        studentPGMap.invalidateSize();
+
+      },
+      150
+    );
+
+  }
+
+
+  /*
+   * IMPORTANT:
+   *
+   * student.js will call this after every
+   * search/filter operation.
+   */
+
+  window.refreshStudentPGMap =
+    function(pgs) {
+
+      renderStudentPGMap(
+        pgs
+      );
+
+    };
+
+
+  /*
+   * Initialize map only after authentication.
+   */
+
+  window.studentAuthPromise.then(
+    function(authenticated) {
+
+      if (!authenticated) {
+
+        return;
+
+      }
+
+
+      initializeStudentPGMap();
+
+    }
+  );
+
+
+  /*
+   * MY LOCATION
+   */
+
+  const centerPGMapBtn =
+    document.getElementById(
+      "centerPGMapBtn"
+    );
+
+
+  if (
+    centerPGMapBtn
+  ) {
+
+    centerPGMapBtn.addEventListener(
+      "click",
+      function() {
+
+        if (
+          !navigator.geolocation
+        ) {
+
+          alert(
+            "Your browser does not support location."
+          );
+
+          return;
+
+        }
+
+
+        centerPGMapBtn.disabled =
+          true;
+
+        centerPGMapBtn.textContent =
+          "Getting location...";
+
+
+        navigator.geolocation.getCurrentPosition(
+
+          function(position) {
+
+            const latitude =
+              position.coords.latitude;
+
+            const longitude =
+              position.coords.longitude;
+
+
+            if (
+              studentPGMap
+            ) {
+
+              /*
+               * Put a temporary student
+               * location marker.
+               */
+
+              L.circleMarker(
+                [
+                  latitude,
+                  longitude
+                ],
+                {
+                  radius:
+                    8,
+
+                  color:
+                    "#66a6ff",
+
+                  fillColor:
+                    "#66a6ff",
+
+                  fillOpacity:
+                    0.8
+                }
+              )
+              .addTo(
+                studentPGMap
+              )
+              .bindPopup(
+                "You are here"
+              );
+
+
+              studentPGMap.setView(
+                [
+                  latitude,
+                  longitude
+                ],
+                14
+              );
+
+            }
+
+
+            centerPGMapBtn.disabled =
+              false;
+
+            centerPGMapBtn.textContent =
+              "📍 My Location";
+
+          },
+
+
+          function(error) {
+
+            console.error(
+              "Map location error:",
+              error
+            );
+
+
+            centerPGMapBtn.disabled =
+              false;
+
+            centerPGMapBtn.textContent =
+              "📍 My Location";
+
+
+            alert(
+              "Unable to get your location. Please allow location access."
+            );
+
+          },
+
+
+          {
+
+            enableHighAccuracy:
+              true,
+
+            timeout:
+              10000,
+
+            maximumAge:
+              300000
+
+          }
+
+        );
+
+      }
+    );
+
+  }
+
+</script>
+
+
+</body>

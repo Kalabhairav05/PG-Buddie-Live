@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner Profile - PG Buddie</title>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  color: #333;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+header .logo { font-weight: bold; font-size: 1.5rem; }
+header nav a {
+  color: #fff; text-decoration: none; margin-left: 1.5rem; font-weight: 500;
+}
+header nav a:hover { text-decoration: underline; }
+
+main {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.profile-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  padding: 25px;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  0% {opacity: 0; transform: translateY(30px);}
+  100% {opacity: 1; transform: translateY(0);}
+}
+
+h2 {
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 15px;
+}
+
+.info-item {
+  background: #f7faff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.info-item strong {
+  display: block;
+  color: #0077b6;
+  margin-bottom: 6px;
+}
+
+.info-item input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  display: none;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn.primary {
+  background: #66a6ff;
+  color: #fff;
+}
+.btn.secondary {
+  background: #fff;
+  border: 2px solid #66a6ff;
+  color: #66a6ff;
+}
+.btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+.saved-msg {
+  text-align: center;
+  margin-top: 10px;
+  color: green;
+  font-weight: 600;
+  display: none;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PG Buddie</div>
+  <nav>
+    <a href="ownerdashboard.html">Dashboard</a>
+        <a href="complaints.html">Complaints</a>
+     <a href="notices.html">Notices</a>
+    <a href="#" id="logoutBtn">Logout</a>
+
+  </nav>
+</header>
+
+<main>
+  <div class="profile-card">
+    <h2>Owner Profile 👤</h2>
+    <div class="info-grid" id="ownerInfo">
+      <div class="info-item">
+        <strong>Name:</strong>
+        <span>Mr. Rajesh Sharma</span>
+        <input type="text" value="Mr. Rajesh Sharma">
+      </div>
+      <div class="info-item">
+        <strong>Email:</strong>
+        <span>rajesh.pgowner@gmail.com</span>
+        <input type="email" value="rajesh.pgowner@gmail.com">
+      </div>
+      <div class="info-item">
+        <strong>Phone:</strong>
+        <span>+91 9876543210</span>
+        <input type="text" value="+91 9876543210">
+      </div>
+      <div class="info-item">
+        <strong>PG Name:</strong>
+        <span>Sunshine Residency</span>
+        <input type="text" value="Sunshine Residency">
+      </div>
+      <div class="info-item">
+        <strong>Total Rooms:</strong>
+        <span>24</span>
+        <input type="number" value="24">
+      </div>
+      <div class="info-item">
+        <strong>Location:</strong>
+        <span>Near City University, Bangalore</span>
+        <input type="text" value="Near City University, Bangalore">
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn primary" onclick="window.location.href='residents.html'">👥 Students Residing</button>
+      <button class="btn secondary" id="editBtn">✏️ Edit</button>
+    </div>
+
+    <div class="saved-msg" id="saveMsg">✅ Changes saved successfully!</div>
+  </div>
+</main>
+
+<script>
+const editBtn = document.getElementById('editBtn');
+const ownerInfo = document.getElementById('ownerInfo');
+const saveMsg = document.getElementById('saveMsg');
+let editMode = false;
+
+editBtn.addEventListener('click', () => {
+  const spans = ownerInfo.querySelectorAll('span');
+  const inputs = ownerInfo.querySelectorAll('input');
+  
+  if (!editMode) {
+    // Switch to edit mode
+    editMode = true;
+    editBtn.textContent = '💾 Save';
+    spans.forEach(s => s.style.display = 'none');
+    inputs.forEach(i => i.style.display = 'block');
+    saveMsg.style.display = 'none';
+  } else {
+    // Save mode
+    editMode = false;
+    editBtn.textContent = '✏️ Edit';
+    spans.forEach((s, i) => {
+      s.textContent = inputs[i].value;
+      s.style.display = 'block';
+    });
+    inputs.forEach(i => i.style.display = 'none');
+    saveMsg.style.display = 'block';
+    setTimeout(() => saveMsg.style.display = 'none', 2000);
+  }
+});
+
+// Logout functionality
+document.getElementById('logoutBtn').addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.clear();
+  window.location.href = 'login.html';
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Bookings - Student Dashboard</title>
+<link rel="stylesheet" href="home.css" />
+<style>
+  body { font-family:'Segoe UI',sans-serif; background:linear-gradient(120deg, #89f7fe, #66a6ff); margin:0; color:#333; }
+  header { position: sticky; top:0; background:linear-gradient(120deg, #89f7fe, #66a6ff); color:#fff; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 3px 10px rgba(0,0,0,0.1);}
+  header nav a{ color:#fff; margin-left:18px; text-decoration:none; font-weight:600;}
+  header nav a:hover{text-decoration:underline;}
+  h1{text-align:center;margin:20px 0;color:#333;}
+
+  .pg-cards { max-width: 1000px; margin: 0 auto; display:grid; gap:16px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); padding:0 16px; }
+  .booking-card { background:#fff; border-radius:12px; padding:16px; box-shadow:0 8px 24px rgba(0,0,0,0.08); display:flex; flex-direction:column; gap:6px; opacity:0; transform: translateY(30px); animation:fadeInUp 0.5s forwards; }
+  .booking-card:nth-child(1) { animation-delay:0.1s; }
+  .booking-card:nth-child(2) { animation-delay:0.25s; }
+  .booking-card:nth-child(3) { animation-delay:0.4s; }
+
+  .booking-card h3 { margin:0; font-size:1.15rem; color:#222; }
+  .booking-card span { font-size:0.95rem; color:#555; }
+  .booking-card .status { font-weight:700; margin-top:6px; font-size:0.95rem; }
+  .status.pending { color:#ff9800; }
+  .status.accepted { color:#4CAF50; }
+  .status.rejected { color:#f44336; }
+
+  @keyframes fadeInUp { 0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);} }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PG Finder</div>
+  <nav>
+    <a href="studenthome.html">Home</a>
+    <a href="bookings.html">Bookings</a>
+    <a href="myresidence.html">My residence</a>
+    <a href="studentprofile.html">Profile</a>
+    <a href="login.html">Logout</a>
+  </nav>
+</header>
+
+<h1>My Bookings</h1>
+<div class="pg-cards" id="bookingsContainer">
+  <!-- Booking cards injected here -->
+</div>
+
+<script>
+  // Mock student bookings
+  const bookings = JSON.parse(localStorage.getItem('pgBookings') || `[
+    {
+      "pgName": "Comfort Stay",
+      "checkIn": "2025-10-15",
+      "status": "Pending",
+      "roomShare": "2 Sharing",
+      "rent": "8500",
+      "distance": "1.2 km from university",
+      "owner": "Mr. Ramesh",
+      "contact": "9876543210"
+    },
+    {
+      "pgName": "Cozy Haven",
+      "checkIn": "2025-10-20",
+      "status": "Accepted",
+      "roomShare": "4 Sharing",
+      "rent": "5800",
+      "distance": "0.8 km from university",
+      "owner": "Mrs. Anita",
+      "contact": "9123456780"
+    },
+    {
+      "pgName": "Urban Nest",
+      "checkIn": "2025-11-01",
+      "status": "Rejected",
+      "roomShare": "3 Sharing",
+      "rent": "6700",
+      "distance": "1.5 km from university",
+      "owner": "Mr. Sanjay",
+      "contact": "9812345678"
+    }
+  ]`);
+
+  const container = document.getElementById('bookingsContainer');
+
+  if(bookings.length === 0){
+    container.innerHTML = `<p style="text-align:center;color:#555;">You have no bookings yet.</p>`;
+  } else {
+    bookings.forEach((b, i) => {
+      const card = document.createElement('div');
+      card.className = 'booking-card';
+      card.innerHTML = `
+        <h3>${b.pgName}</h3>
+        <span><strong>Check-in:</strong> ${b.checkIn}</span>
+        <span><strong>Room Share:</strong> ${b.roomShare}</span>
+        <span><strong>Rent:</strong> ₹${b.rent}/month</span>
+        <span><strong>Distance:</strong> ${b.distance}</span>
+        <span><strong>Owner:</strong> ${b.owner}</span>
+        <span><strong>Contact:</strong> ${b.contact}</span>
+        <span class="status ${b.status.toLowerCase()}">Status: ${b.status}</span>
+      `;
+      container.appendChild(card);
+    });
+  }
+</script>
+
+</body>
+</html>

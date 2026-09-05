@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check-in Requests - PG Buddie</title>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  margin: 0;
+  color: #333;
+  scroll-behavior: smooth;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+header .logo { font-weight: bold; font-size: 1.5rem; }
+header nav a {
+  color: #fff; text-decoration: none; margin-left: 1.5rem; font-weight: 500;
+}
+header nav a:hover { text-decoration: underline; }
+
+main {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+.request-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  0% {opacity: 0; transform: translateY(30px);}
+  100% {opacity: 1; transform: translateY(0);}
+}
+
+.request-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.request-info div { font-weight: 500; }
+
+.btn-group {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn.accept { background: #1d892a; color: #fff; }
+.btn.reject { background: #ff6b6b; color: #fff; }
+.btn:hover { opacity: 0.9; transform: translateY(-2px); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PG Buddie</div>
+  <nav>
+    <a href="ownerdashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Check-in Requests 📝</h2>
+  <div id="requestsContainer"></div>
+</main>
+
+<script>
+// Mock check-in requests
+let requests = [
+  { name: "Aarav Mehta", email: "aarav.mehta@gmail.com", phone: "+91 9876543211", university: "City University" },
+  { name: "Priya Nair", email: "priya.nair@gmail.com", phone: "+91 9876543212", university: "Tech University" },
+  { name: "Rohan Das", email: "rohan.das@gmail.com", phone: "+91 9876543213", university: "State University" },
+  { name: "Neha Singh", email: "neha.singh@gmail.com", phone: "+91 9876543214", university: "City University" },
+  { name: "Aditya Rao", email: "aditya.rao@gmail.com", phone: "+91 9876543215", university: "Tech University" }
+];
+
+const container = document.getElementById('requestsContainer');
+
+function renderRequests() {
+  container.innerHTML = '';
+  if(requests.length === 0){
+    container.innerHTML = '<p style="color:white;text-align:center;">No pending check-in requests.</p>';
+    return;
+  }
+  requests.forEach((r, idx) => {
+    const card = document.createElement('div');
+    card.className = 'request-card';
+    card.innerHTML = `
+      <div class="request-info">
+        <div><strong>Name:</strong> ${r.name}</div>
+        <div><strong>Email:</strong> ${r.email}</div>
+        <div><strong>Phone:</strong> ${r.phone}</div>
+        <div><strong>University:</strong> ${r.university}</div>
+      </div>
+      <div class="btn-group">
+        <button class="btn accept" onclick="acceptRequest(${idx})">Accept</button>
+        <button class="btn reject" onclick="rejectRequest(${idx})">Reject</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function acceptRequest(idx){
+  alert(`Accepted check-in for ${requests[idx].name}`);
+  requests.splice(idx, 1);
+  renderRequests();
+}
+
+function rejectRequest(idx){
+  alert(`Rejected check-in for ${requests[idx].name}`);
+  requests.splice(idx, 1);
+  renderRequests();
+}
+
+renderRequests();
+
+document.getElementById('logoutBtn').addEventListener('click', e=>{
+  e.preventDefault();
+  localStorage.clear();
+  window.location.href='login.html';
+});
+</script>
+
+</body>
+</html>

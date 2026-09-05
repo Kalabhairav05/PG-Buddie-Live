@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+/>
+
+<title>PG Finder - My Residence</title>
+
+<link
+  rel="stylesheet"
+  href="home.css"
+/>
+
+
+<style>
+
+/* =========================================================
+   EXISTING STYLES
+   ========================================================= */
+
+@keyframes fadeInUp {
+
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes fadeIn {
+
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+
+}
+
+
+body {
+
+  font-family:
+    'Segoe UI',
+    sans-serif;
+
+  background:
+    linear-gradient(
+      120deg,
+      #89f7fe,
+      #66a6ff
+    );
+
+  color: #333;
+
+  margin: 0;
+
+  scroll-behavior: smooth;
+
+}
+
+
+header {
+
+  position: sticky;
+
+  top: 0;
+
+  z-index: 100;
+
+  animation:
+    fadeIn
+    0.8s
+    ease-in-out
+    forwards;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0,0,0,0.08);
+
+}
+
+
+section.welcome {
+
+  text-align: center;
+
+  padding: 20px 10px;
+
+}
+
+
+section.welcome h2 {
+
+  font-size: 1.5rem;
+
+  margin-bottom: 4px;
+
+}
+
+
+.dashboard {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(280px,1fr)
+    );
+
+  gap: 18px;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding:
+    0 16px 32px;
+
+}
+
+
+.card {
+
+  background: #fff;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,0,0,0.06);
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+  animation:
+    fadeInUp
+    0.8s
+    ease-out
+    forwards;
+
+}
+
+
+.card:hover {
+
+  transform:
+    translateY(-6px);
+
+  box-shadow:
+    0 18px 36px
+    rgba(0,0,0,0.12);
+
+}
+
+
+.card h3 {
+
+  font-size: 1.2rem;
+
+  color: #222;
+
+  margin: 0;
+
+}
+
+
+.card p {
+
+  margin: 4px 0;
+
+  font-weight: 500;
+
+}
+
+
+.highlight {
+
+  color: #66a6ff;
+
+  font-weight: 700;
+
+  font-size: 1.1rem;
+
+}
+
+
+.amenities {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 6px;
+
+}
+
+
+.amenity {
+
+  flex: 1;
+
+  text-align: center;
+
+  padding: 10px 0;
+
+  border-radius: 10px;
+
+  font-weight: 600;
+
+  color: #555;
+
+  background: #f1f3f8;
+
+  transition: all 0.3s;
+
+}
+
+
+.amenity.active {
+
+  background: #66a6ff;
+
+  color: white;
+
+}
+
+
+.btn {
+
+  padding: 10px 14px;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  border: none;
+
+  transition: all 0.2s;
+
+}
+
+
+.btn.primary {
+
+  background: #66a6ff;
+
+  color: #fff;
+
+}
+
+
+.btn.secondary {
+
+  background: #fff;
+
+  border:
+    2px solid #66a6ff;
+
+  color: #66a6ff;
+
+}
+
+
+.btn:hover {
+
+  opacity: 0.9;
+
+}
+
+
+.status-row {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  padding: 6px 0;
+
+  border-bottom:
+    1px solid #eee;
+
+  font-weight: 600;
+
+}
+
+
+.status-row:last-child {
+
+  border-bottom: none;
+
+}
+
+
+/* =========================================================
+   COMMUNITY FEED
+   ========================================================= */
+
+.community-feed {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  max-height: 300px;
+
+  overflow-y: auto;
+
+  margin-top: 10px;
+
+}
+
+
+.community-post {
+
+  background: #f1f3f8;
+
+  padding: 10px 12px;
+
+  border-radius: 10px;
+
+  font-size: 0.95rem;
+
+}
+
+
+.community-post strong {
+
+  color: #222;
+
+}
+
+
+.community-post .time {
+
+  font-size: 0.8rem;
+
+  color: #666;
+
+  margin-top: 2px;
+
+}
+
+
+.community-input {
+
+  display: flex;
+
+  gap: 8px;
+
+  margin-top: 10px;
+
+}
+
+
+.community-input input {
+
+  flex: 1;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  border: 1px solid #ccc;
+
+  outline: none;
+
+}
+
+
+.community-input input:focus {
+
+  border-color: #66a6ff;
+
+  box-shadow:
+    0 4px 14px
+    rgba(102,166,255,0.12);
+
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.modal {
+
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0,0,0,0.45);
+
+  backdrop-filter:
+    blur(3px);
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 24px;
+
+  z-index: 9999;
+
+}
+
+
+.modal.show {
+
+  display: flex;
+
+}
+
+
+.modal-card {
+
+  width: 100%;
+
+  max-width: 540px;
+
+  background: #fff;
+
+  border-radius: 14px;
+
+  padding: 18px 20px;
+
+  position: relative;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  box-shadow:
+    0 24px 60px
+    rgba(0,0,0,0.18);
+
+}
+
+
+/* =========================================================
+   SLIDE ANIMATIONS
+   ========================================================= */
+
+@keyframes slideUp {
+
+  0% {
+
+    transform:
+      translateY(100px);
+
+    opacity: 0;
+
+  }
+
+  100% {
+
+    transform:
+      translateY(0);
+
+    opacity: 1;
+
+  }
+
+}
+
+
+@keyframes slideDown {
+
+  0% {
+
+    transform:
+      translateY(0);
+
+    opacity: 1;
+
+  }
+
+  100% {
+
+    transform:
+      translateY(100px);
+
+    opacity: 0;
+
+  }
+
+}
+
+
+.modal.show .modal-card {
+
+  animation:
+    slideUp
+    0.4s
+    ease
+    forwards;
+
+}
+
+
+.modal.hide .modal-card {
+
+  animation:
+    slideDown
+    0.4s
+    ease
+    forwards;
+
+}
+
+
+.modal-title {
+
+  font-size: 1.15rem;
+
+  font-weight: 700;
+
+  color: #222;
+
+}
+
+
+.modal-sub {
+
+  color: #555;
+
+  font-size: 0.95rem;
+
+  margin-bottom: 6px;
+
+}
+
+
+/* =========================================================
+   COMPLAINT GRID
+   ========================================================= */
+
+.complaint-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(120px,1fr)
+    );
+
+  gap: 12px;
+
+  margin-top: 8px;
+
+  align-items: stretch;
+
+}
+
+
+.complaint-grid
+input[type="radio"] {
+
+  display: none;
+
+}
+
+
+.complaint-grid label {
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 14px 10px;
+
+  border-radius: 12px;
+
+  border:
+    1px solid
+    rgba(0,0,0,0.08);
+
+  background: #f9fbff;
+
+  font-weight: 600;
+
+  color: #333;
+
+  cursor: pointer;
+
+  transition:
+    all 0.22s ease;
+
+  box-shadow:
+    0 3px 6px
+    rgba(0,0,0,0.03);
+
+  font-size: 0.92rem;
+
+  text-align: center;
+
+}
+
+
+.complaint-grid label:hover {
+
+  transform:
+    translateY(-3px);
+
+  box-shadow:
+    0 8px 18px
+    rgba(0,0,0,0.08);
+
+}
+
+
+/* =========================================================
+   COMPLAINT ICONS
+   ========================================================= */
+
+label[for="c-water"]::before {
+  content: "💧";
+}
+
+label[for="c-power"]::before {
+  content: "⚡";
+}
+
+label[for="c-mess"]::before {
+  content: "🍽️";
+}
+
+label[for="c-clean"]::before {
+  content: "🧹";
+}
+
+label[for="c-roommate"]::before {
+  content: "🏠";
+}
+
+label[for="c-plumbing"]::before {
+  content: "🔧";
+}
+
+label[for="c-wifi"]::before {
+  content: "📶";
+}
+
+label[for="c-electrical"]::before {
+  content: "💡";
+}
+
+label[for="c-carp"]::before {
+  content: "🪚";
+}
+
+
+.complaint-grid
+input[type="radio"]:checked
++ label {
+
+  background:
+    linear-gradient(
+      135deg,
+      #66a6ff,
+      #4facfe
+    );
+
+  color: #fff;
+
+  border-color: transparent;
+
+  box-shadow:
+    0 10px 30px
+    rgba(102,166,255,0.22);
+
+  transform:
+    translateY(-2px);
+
+}
+
+
+textarea {
+
+  min-height: 88px;
+
+  border-radius: 10px;
+
+  padding: 12px;
+
+  border: 1px solid #ddd;
+
+  resize: vertical;
+
+  font-family: inherit;
+
+  font-size: 0.95rem;
+
+  background: #fefefe;
+
+  transition: 0.2s;
+
+}
+
+
+textarea:focus {
+
+  border-color: #66a6ff;
+
+  box-shadow:
+    0 6px 20px
+    rgba(102,166,255,0.12);
+
+}
+
+
+.success-msg {
+
+  display: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e8fff9,
+      #d9ffef
+    );
+
+  color: #066e57;
+
+  border:
+    1px solid #b7f0da;
+
+  padding: 10px;
+
+  border-radius: 8px;
+
+  margin-top: 10px;
+
+  text-align: center;
+
+  font-weight: 600;
+
+  animation:
+    fadeIn
+    0.4s
+    ease-in-out
+    forwards;
+
+}
+
+
+.close-x {
+
+  position: absolute;
+
+  right: 18px;
+
+  top: 16px;
+
+  font-size: 22px;
+
+  background: transparent;
+
+  border: none;
+
+  cursor: pointer;
+
+  color: #333;
+
+  transition:
+    transform 0.2s ease;
+
+}
+
+
+.close-x:hover {
+
+  transform:
+    rotate(90deg);
+
+  color: #66a6ff;
+
+}
+
+
+.residence-details {
+
+  background: #fff;
+
+  padding: 20px;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 12px 28px
+    rgba(0,0,0,0.06);
+
+  margin: 20px auto;
+
+  max-width: 800px;
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 12px;
+
+}
+
+
+.residence-details h3 {
+
+  grid-column: 1/-1;
+
+  margin-bottom: 8px;
+
+}
+
+
+.residence-details p {
+
+  margin: 2px 0;
+
+  font-weight: 500;
+
+}
+
+
+@media(max-width:720px) {
+
+  .residence-details {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+
+@media(max-width:480px) {
+
+  .modal-card {
+
+    padding:
+      18px 16px;
+
+  }
+
+}
+
+
+/* =========================================================
+   SLIDE DOWN ANIMATION FOR MODAL CLOSE
+   ========================================================= */
+
+@keyframes slideDown {
+
+  0% {
+
+    transform:
+      translateY(0);
+
+    opacity: 1;
+
+  }
+
+  100% {
+
+    transform:
+      translateY(100vh);
+
+    opacity: 0;
+
+  }
+
+}
+
+
+.modal.hide-animate .modal-card {
+
+  animation:
+    slideDown
+    0.35s
+    forwards;
+
+}
+
+
+/* =========================================================
+   NOTICES
+   ========================================================= */
+
+.notices-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-top: 8px;
+
+  max-height: 350px;
+
+  overflow: auto;
+
+}
+
+
+.notice-item {
+
+  background: #f8fbff;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  border:
+    1px solid
+    rgba(102,166,255,0.08);
+
+  box-shadow:
+    0 4px 14px
+    rgba(102,166,255,0.03);
+
+}
+
+
+.notice-item strong {
+
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #1b3558;
+
+}
+
+
+.notice-time {
+
+  font-size: 0.82rem;
+
+  color: #666;
+
+  margin-top: 6px;
+
+  text-align: right;
+
+}
+
+
+/* =========================================================
+   NOTICE BADGE
+   ========================================================= */
+
+#noticesLink {
+
+  position: relative;
+
+}
+
+
+#noticeBadge {
+
+  position: absolute;
+
+  top: -6px;
+
+  right: -10px;
+
+  background: #e04b4b;
+
+  color: white;
+
+  font-size: 0.72rem;
+
+  font-weight: 700;
+
+  width: 18px;
+
+  height: 18px;
+
+  border-radius: 50%;
+
+  display: none;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow:
+    0 2px 6px
+    rgba(0,0,0,0.12);
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+     ========================================================= -->
+
+<header>
+
+  <div class="logo">
+    PG Buddie
+  </div>
+
+
+  <nav>
+
+    <a href="studenthome.html">
+      Home
+    </a>
+
+
+    <a id="manageLink">
+      Manage
+    </a>
+
+
+    <a href="studentprofile.html">
+      Profile
+    </a>
+
+
+    <a id="communityLink">
+      Community
+    </a>
+
+
+    <a id="noticesLink">
+
+      Notices
+
+      <span
+        id="noticeBadge"
+        aria-hidden="true"
+      ></span>
+
+    </a>
+
+
+    <!--
+      Authentication logout.
+      The JavaScript below handles this.
+    -->
+
+    <a
+      href="login.html"
+      id="logoutBtn"
+    >
+      Logout
+    </a>
+
+  </nav>
+
+</header>
+
+
+<!-- =========================================================
+     WELCOME
+     ========================================================= -->
+
+<section class="welcome">
+
+  <h2>
+
+    Welcome,
+
+    <span id="studentName">
+      Student
+    </span>
+
+    👋
+
+  </h2>
+
+
+  <p>
+    Manage your PG residence,
+    community posts,
+    and amenities here.
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     RESIDENCE DETAILS
+     ========================================================= -->
+
+<section
+  class="residence-details"
+  id="residenceSection"
+>
+
+  <h3>
+    Current Residence Details
+  </h3>
+
+
+  <p>
+    <strong>PG Name:</strong>
+
+    <span id="pgName">
+      -
+    </span>
+  </p>
+
+
+  <p>
+    <strong>Room Share:</strong>
+
+    <span id="roomShare">
+      -
+    </span>
+  </p>
+
+
+  <p>
+    <strong>Total Amount:</strong>
+
+    <span id="annualAmount">
+      ₹ 0
+    </span>
+  </p>
+
+
+  <p>
+
+    <strong>
+      Total Paid:
+    </strong>
+
+    <span
+      class="highlight"
+      id="totalPaid"
+    >
+      ₹ 0
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>
+      PG Address:
+    </strong>
+
+    <span id="pgAddress">
+      -
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>
+      Owner Name:
+    </strong>
+
+    <span id="ownerName">
+      -
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>
+      Owner Contact:
+    </strong>
+
+    <span id="ownerContact">
+      -
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>
+      Distance from University:
+    </strong>
+
+    <span id="pgDistance">
+      -
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>
+      Total Rooms:
+    </strong>
+
+    <span id="totalRooms">
+      -
+    </span>
+
+  </p>
+
+
+  <p>
+
+    <strong>
+      Your Room Number:
+    </strong>
+
+    <span id="yourRoom">
+      -
+    </span>
+
+  </p>
+
+</section>
+
+
+<!-- =========================================================
+     AMENITIES
+     ========================================================= -->
+
+<section class="dashboard">
+
+  <div class="card">
+
+    <h3>
+      Amenities Status
+    </h3>
+
+
+    <div class="amenities">
+
+      <div
+        class="amenity"
+        id="amenWater"
+      >
+        Water
+      </div>
+
+
+      <div
+        class="amenity"
+        id="amenPower"
+      >
+        Power
+      </div>
+
+
+      <div
+        class="amenity"
+        id="amenMess"
+      >
+        Mess
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     MODAL
+     ========================================================= -->
+
+<div
+  class="modal"
+  id="actionModal"
+>
+
+  <div class="modal-card">
+
+
+    <button
+      class="close-x"
+      id="modalClose"
+    >
+      &times;
+    </button>
+
+
+    <div
+      class="modal-title"
+      id="modalActionTitle"
+    >
+      Action
+    </div>
+
+
+    <div
+      class="modal-sub"
+      id="modalSub"
+    >
+      Details here
+    </div>
+
+
+    <!-- =====================================================
+         COMPLAINT OPTIONS
+         ===================================================== -->
+
+    <div
+      class="complaint-grid"
+      id="complaintOptions"
+      style="display:none;"
+    >
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-water"
+          name="complaintType"
+          value="Water"
+        >
+
+        <label for="c-water">
+          Water
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-power"
+          name="complaintType"
+          value="Power"
+        >
+
+        <label for="c-power">
+          Power
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-mess"
+          name="complaintType"
+          value="Mess"
+        >
+
+        <label for="c-mess">
+          Mess
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-clean"
+          name="complaintType"
+          value="Cleanliness"
+        >
+
+        <label for="c-clean">
+          Cleanliness
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-roommate"
+          name="complaintType"
+          value="Roommate"
+        >
+
+        <label for="c-roommate">
+          Roommate
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-plumbing"
+          name="complaintType"
+          value="Plumbing"
+        >
+
+        <label for="c-plumbing">
+          Plumbing
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-wifi"
+          name="complaintType"
+          value="Wifi"
+        >
+
+        <label for="c-wifi">
+          Wifi
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-electrical"
+          name="complaintType"
+          value="Electrical"
+        >
+
+        <label for="c-electrical">
+          Electrical
+        </label>
+
+      </div>
+
+
+      <div>
+
+        <input
+          type="radio"
+          id="c-carp"
+          name="complaintType"
+          value="Carpentry"
+        >
+
+        <label for="c-carp">
+          Carpentry
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TEXTAREA / DATE
+         ===================================================== -->
+
+    <textarea
+      id="modalInput"
+      style="display:none;"
+      placeholder="Describe issue..."
+    ></textarea>
+
+
+    <input
+      type="date"
+      id="messDate"
+      style="display:none;"
+    />
+
+
+    <!-- =====================================================
+         COMMUNITY
+         ===================================================== -->
+
+    <div
+      id="communityModalContent"
+      style="display:none;"
+    >
+
+      <div
+        class="community-feed"
+        id="communityFeed"
+      ></div>
+
+
+      <div class="community-input">
+
+        <input
+          type="text"
+          id="communityInput"
+          placeholder="Write something..."
+        />
+
+
+        <button
+          class="btn primary"
+          id="communityPostBtn"
+        >
+          Post
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         NOTICES
+         ===================================================== -->
+
+    <div
+      id="noticesModalContent"
+      style="display:none;"
+    >
+
+      <div
+        class="notices-list"
+        id="noticesList"
+      ></div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MODAL ACTIONS
+         ===================================================== -->
+
+    <div
+      class="actions"
+      style="
+        margin-top:10px;
+        display:flex;
+        gap:10px;
+      "
+    >
+
+      <button
+        class="btn secondary"
+        id="modalCancel"
+      >
+        Close
+      </button>
+
+
+      <button
+        class="btn primary"
+        id="modalSubmit"
+        style="display:none;"
+      >
+        Submit
+      </button>
+
+    </div>
+
+
+    <div
+      class="success-msg"
+      id="actionSuccess"
+    >
+      Submitted successfully!
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================================================
+     PAGE JAVASCRIPT
+     ========================================================= -->
+
+<script>
+
+
+/* =========================================================
+   STUDENT DATA
+   ========================================================= */
+
+/*
+  We no longer derive the student's name
+  from studentEmail.
+
+  login.js stores the backend user as:
+
+      pgBuddieUser
+
+  Example:
+
+      {
+        name: "Kalyan",
+        email: "...",
+        role: "student"
+      }
+*/
+
+const storedUser =
+  localStorage.getItem(
+    "pgBuddieUser"
+  );
+
+
+let currentUser = null;
+
+
+try {
+
+  currentUser =
+    storedUser
+      ? JSON.parse(storedUser)
+      : null;
+
+} catch (error) {
+
+  console.error(
+    "Unable to read stored user:",
+    error
+  );
+
+}
+
+
+/*
+  Keep studentName as a variable because
+  the Community section uses it later.
+*/
+
+const studentName =
+  currentUser &&
+  currentUser.name
+    ? currentUser.name
+    : "Student";
+
+
+document
+  .getElementById("studentName")
+  .textContent =
+    studentName;
+
+
+/* =========================================================
+   RESIDENCE DATA
+   ========================================================= */
+
+const residenceData =
+  JSON.parse(
+    localStorage.getItem(
+      "studentResidence"
+    ) || "{}"
+  );
+
+
+const pgFields = {
+
+  pgName:
+    "pgName",
+
+  roomShare:
+    "roomShare",
+
+  totalPaid:
+    "annualAmount",
+
+  pgAddress:
+    "pgAddress",
+
+  ownerName:
+    "ownerName",
+
+  ownerContact:
+    "ownerContact",
+
+  pgDistance:
+    "pgDistance",
+
+  totalRooms:
+    "totalRooms",
+
+  yourRoom:
+    "yourRoom"
+
+};
+
+
+for (
+  let k in pgFields
+) {
+
+  document
+    .getElementById(
+      pgFields[k]
+    )
+    .textContent =
+      residenceData[k] || "-";
+
+}
+
+
+document
+  .getElementById(
+    "totalPaid"
+  )
+  .textContent =
+    "₹ " +
+    (
+      residenceData.totalPaid ||
+      "0"
+    );
+
+
+if (
+  residenceData.amenities
+) {
+
+  if (
+    residenceData.amenities.water
+  ) {
+
+    document
+      .getElementById(
+        "amenWater"
+      )
+      .classList.add(
+        "active"
+      );
+
+  }
+
+
+  if (
+    residenceData.amenities.power
+  ) {
+
+    document
+      .getElementById(
+        "amenPower"
+      )
+      .classList.add(
+        "active"
+      );
+
+  }
+
+
+  if (
+    residenceData.amenities.mess
+  ) {
+
+    document
+      .getElementById(
+        "amenMess"
+      )
+      .classList.add(
+        "active"
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
+const logoutBtn =
+  document.getElementById(
+    "logoutBtn"
+  );
+
+
+if (logoutBtn) {
+
+  logoutBtn.addEventListener(
+    "click",
+    (event) => {
+
+      event.preventDefault();
+
+
+      /*
+        Remove the real authentication.
+      */
+
+      localStorage.removeItem(
+        "pgBuddieToken"
+      );
+
+
+      localStorage.removeItem(
+        "pgBuddieUser"
+      );
+
+
+      /*
+        Do NOT use:
+
+          localStorage.clear()
+
+        because this page has other
+        application data in localStorage.
+      */
+
+
+      window.location.replace(
+        "login.html"
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MODAL ELEMENTS
+   ========================================================= */
+
+const actionModal =
+  document.getElementById(
+    "actionModal"
+  );
+
+
+const modalTitle =
+  document.getElementById(
+    "modalActionTitle"
+  );
+
+
+const modalSub =
+  document.getElementById(
+    "modalSub"
+  );
+
+
+const modalInput =
+  document.getElementById(
+    "modalInput"
+  );
+
+
+const messDate =
+  document.getElementById(
+    "messDate"
+  );
+
+
+const complaintOptions =
+  document.getElementById(
+    "complaintOptions"
+  );
+
+
+const modalCancel =
+  document.getElementById(
+    "modalCancel"
+  );
+
+
+const modalClose =
+  document.getElementById(
+    "modalClose"
+  );
+
+
+const actionSuccess =
+  document.getElementById(
+    "actionSuccess"
+  );
+
+
+const communityModalContent =
+  document.getElementById(
+    "communityModalContent"
+  );
+
+
+const modalSubmit =
+  document.getElementById(
+    "modalSubmit"
+  );
+
+
+const noticesModalContent =
+  document.getElementById(
+    "noticesModalContent"
+  );
+
+
+const noticesList =
+  document.getElementById(
+    "noticesList"
+  );
+
+
+const noticeBadge =
+  document.getElementById(
+    "noticeBadge"
+  );
+
+
+/* =========================================================
+   NOTICES
+   ========================================================= */
+
+const noticesKey =
+  "pgNotices_" +
+  (
+    residenceData.pgName ||
+    "default"
+  );
+
+
+let notices =
+  JSON.parse(
+    localStorage.getItem(
+      noticesKey
+    ) || "null"
+  );
+
+
+if (!notices) {
+
+  const now =
+    Date.now();
+
+
+  notices = [
+
+    {
+      title:
+        "Water Maintenance",
+
+      text:
+        "Water supply will be shut down tomorrow 8–10 AM.",
+
+      ts:
+        now - 86400000
+    },
+
+
+    {
+      title:
+        "Mess Menu Change",
+
+      text:
+        "Sunday will have special menu.",
+
+      ts:
+        now - 43200000
+    },
+
+
+    {
+      title:
+        "Rent Reminder",
+
+      text:
+        "Next month’s rent due by 25th.",
+
+      ts:
+        now - 14400000
+    },
+
+
+    {
+      title:
+        "Guest Policy",
+
+      text:
+        "No overnight guests 11pm–6am.",
+
+      ts:
+        now - 7200000
+    },
+
+
+    {
+      title:
+        "Room Inspection",
+
+      text:
+        "Inspection Friday 2–4 PM.",
+
+      ts:
+        now
+    }
+
+  ];
+
+
+  localStorage.setItem(
+    noticesKey,
+    JSON.stringify(
+      notices
+    )
+  );
+
+}
+
+
+/* =========================================================
+   NOTICE RENDERING
+   ========================================================= */
+
+function renderNotices() {
+
+  noticesList.innerHTML =
+    notices
+      .map(
+        n => `
+
+          <div class="notice-item">
+
+            <strong>
+              ${n.title}
+            </strong>
+
+            <div>
+              ${n.text}
+            </div>
+
+            <div class="notice-time">
+              ${new Date(
+                n.ts
+              ).toLocaleString()}
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   NOTICE BADGE
+   ========================================================= */
+
+const lastSeenKey =
+  noticesKey +
+  "_lastSeen";
+
+
+function getUnreadCount() {
+
+  const lastSeen =
+    parseInt(
+      localStorage.getItem(
+        lastSeenKey
+      ) || "0",
+      10
+    );
+
+
+  return notices.filter(
+    n =>
+      n.ts >
+      lastSeen
+  ).length;
+
+}
+
+
+function updateNoticeBadge() {
+
+  const count =
+    getUnreadCount();
+
+
+  if (count > 0) {
+
+    noticeBadge.textContent =
+      count > 99
+        ? "99+"
+        : count;
+
+
+    noticeBadge.style.display =
+      "flex";
+
+  } else {
+
+    noticeBadge.style.display =
+      "none";
+
+  }
+
+}
+
+
+updateNoticeBadge();
+
+
+/* =========================================================
+   MODAL CONTROLS
+   ========================================================= */
+
+function openModal() {
+
+  actionModal.classList.remove(
+    "hide",
+    "hide-animate"
+  );
+
+
+  actionModal.classList.add(
+    "show"
+  );
+
+}
+
+
+function closeModal() {
+
+  actionModal.classList.add(
+    "hide-animate"
+  );
+
+
+  setTimeout(
+    () => {
+
+      actionModal.classList.remove(
+        "show",
+        "hide-animate"
+      );
+
+    },
+    350
+  );
+
+}
+
+
+modalClose.addEventListener(
+  "click",
+  closeModal
+);
+
+
+modalCancel.addEventListener(
+  "click",
+  closeModal
+);
+
+
+window.addEventListener(
+  "keydown",
+  e => {
+
+    if (
+      e.key === "Escape"
+    ) {
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   MANAGE MODAL
+   ========================================================= */
+
+document
+  .getElementById(
+    "manageLink"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      modalTitle.textContent =
+        "Manage";
+
+
+      modalSub.innerHTML = `
+
+        <div class="status-row">
+
+          <span>
+            Complaint Status
+          </span>
+
+          <span>
+            ${
+              residenceData.complaintStatus ||
+              "No pending complaints"
+            }
+          </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+          <span>
+            Mess Booking Status
+          </span>
+
+          <span>
+            ${
+              residenceData.messBooking ||
+              "Not booked"
+            }
+          </span>
+
+        </div>
+
+
+        <div
+          style="
+            margin-top:12px;
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+          "
+        >
+
+          <button
+            class="btn primary"
+            id="applyComplaintBtn"
+          >
+            Apply Complaint
+          </button>
+
+
+          <button
+            class="btn secondary"
+            id="messBookingBtn"
+          >
+            Mess Booking
+          </button>
+
+        </div>
+
+      `;
+
+
+      complaintOptions.style.display =
+        "none";
+
+
+      modalInput.style.display =
+        "none";
+
+
+      messDate.style.display =
+        "none";
+
+
+      communityModalContent.style.display =
+        "none";
+
+
+      noticesModalContent.style.display =
+        "none";
+
+
+      modalSubmit.style.display =
+        "none";
+
+
+      actionSuccess.style.display =
+        "none";
+
+
+      openModal();
+
+
+      document
+        .getElementById(
+          "applyComplaintBtn"
+        )
+        .onclick =
+          openComplaintModal;
+
+
+      document
+        .getElementById(
+          "messBookingBtn"
+        )
+        .onclick =
+          openMessModal;
+
+    }
+  );
+
+
+/* =========================================================
+   COMMUNITY MODAL
+   ========================================================= */
+
+document
+  .getElementById(
+    "communityLink"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      modalTitle.textContent =
+        "Community";
+
+
+      modalSub.textContent =
+        "Interact with residents";
+
+
+      complaintOptions.style.display =
+        "none";
+
+
+      modalInput.style.display =
+        "none";
+
+
+      messDate.style.display =
+        "none";
+
+
+      communityModalContent.style.display =
+        "block";
+
+
+      noticesModalContent.style.display =
+        "none";
+
+
+      actionSuccess.style.display =
+        "none";
+
+
+      modalSubmit.style.display =
+        "none";
+
+
+      openModal();
+
+
+      renderCommunity();
+
+    }
+  );
+
+
+/* =========================================================
+   NOTICES MODAL
+   ========================================================= */
+
+document
+  .getElementById(
+    "noticesLink"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      modalTitle.textContent =
+        "Notices";
+
+
+      modalSub.textContent =
+        "Important notices from the owner";
+
+
+      complaintOptions.style.display =
+        "none";
+
+
+      modalInput.style.display =
+        "none";
+
+
+      messDate.style.display =
+        "none";
+
+
+      communityModalContent.style.display =
+        "none";
+
+
+      noticesModalContent.style.display =
+        "block";
+
+
+      actionSuccess.style.display =
+        "none";
+
+
+      modalSubmit.style.display =
+        "none";
+
+
+      renderNotices();
+
+
+      openModal();
+
+
+      localStorage.setItem(
+        lastSeenKey,
+        String(
+          Date.now()
+        )
+      );
+
+
+      updateNoticeBadge();
+
+    }
+  );
+
+
+/* =========================================================
+   COMPLAINT MODAL
+   ========================================================= */
+
+function openComplaintModal() {
+
+  modalTitle.textContent =
+    "Apply Complaint";
+
+
+  modalSub.textContent =
+    "Select complaint type and describe issue";
+
+
+  complaintOptions.style.display =
+    "grid";
+
+
+  modalInput.style.display =
+    "block";
+
+
+  messDate.style.display =
+    "none";
+
+
+  communityModalContent.style.display =
+    "none";
+
+
+  noticesModalContent.style.display =
+    "none";
+
+
+  modalSubmit.style.display =
+    "inline-block";
+
+
+  actionSuccess.style.display =
+    "none";
+
+
+  modalInput.value =
+    "";
+
+
+  document
+    .querySelectorAll(
+      "#complaintOptions input"
+    )
+    .forEach(
+      inp =>
+        inp.checked =
+          false
+    );
+
+
+  modalSubmit.onclick =
+    () => {
+
+      const selected =
+        document.querySelector(
+          "#complaintOptions input:checked"
+        );
+
+
+      const text =
+        modalInput.value.trim();
+
+
+      if (
+        !selected ||
+        !text
+      ) {
+
+        alert(
+          "Please select a complaint type and describe your issue."
+        );
+
+        return;
+
+      }
+
+
+      residenceData.complaintStatus =
+        `${selected.value} complaint applied`;
+
+
+      localStorage.setItem(
+        "studentResidence",
+        JSON.stringify(
+          residenceData
+        )
+      );
+
+
+      actionSuccess.textContent =
+        "Complaint submitted successfully!";
+
+
+      actionSuccess.style.display =
+        "block";
+
+
+      setTimeout(
+        closeModal,
+        1500
+      );
+
+    };
+
+}
+
+
+/* =========================================================
+   MESS BOOKING
+   ========================================================= */
+
+function openMessModal() {
+
+  modalTitle.textContent =
+    "Mess Booking";
+
+
+  modalSub.textContent =
+    "Select your preferred start date";
+
+
+  complaintOptions.style.display =
+    "none";
+
+
+  modalInput.style.display =
+    "none";
+
+
+  messDate.style.display =
+    "block";
+
+
+  communityModalContent.style.display =
+    "none";
+
+
+  noticesModalContent.style.display =
+    "none";
+
+
+  modalSubmit.style.display =
+    "inline-block";
+
+
+  actionSuccess.style.display =
+    "none";
+
+
+  modalSubmit.onclick =
+    () => {
+
+      if (
+        !messDate.value
+      ) {
+
+        alert(
+          "Select a date"
+        );
+
+        return;
+
+      }
+
+
+      const selectedDate =
+        new Date(
+          messDate.value
+        );
+
+
+      const today =
+        new Date();
+
+
+      today.setHours(
+        0,
+        0,
+        0,
+        0
+      );
+
+
+      if (
+        selectedDate <
+        today
+      ) {
+
+        alert(
+          "Please select a valid future date."
+        );
+
+        return;
+
+      }
+
+
+      residenceData.messBooking =
+        `From ${messDate.value}`;
+
+
+      localStorage.setItem(
+        "studentResidence",
+        JSON.stringify(
+          residenceData
+        )
+      );
+
+
+      actionSuccess.textContent =
+        "Mess booking submitted!";
+
+
+      actionSuccess.style.display =
+        "block";
+
+
+      setTimeout(
+        closeModal,
+        1500
+      );
+
+    };
+
+}
+
+
+/* =========================================================
+   COMMUNITY
+   ========================================================= */
+
+const communityFeed =
+  document.getElementById(
+    "communityFeed"
+  );
+
+
+const communityInput =
+  document.getElementById(
+    "communityInput"
+  );
+
+
+const communityPostBtn =
+  document.getElementById(
+    "communityPostBtn"
+  );
+
+
+const communityKey =
+  "communityPosts_" +
+  (
+    residenceData.community ||
+    "default"
+  );
+
+
+let communityPosts =
+  JSON.parse(
+    localStorage.getItem(
+      communityKey
+    ) || "[]"
+  );
+
+
+if (
+  communityPosts.length === 0
+) {
+
+  communityPosts = [
+
+    {
+      user:
+        "Alice",
+
+      text:
+        "Does anyone know when the laundry service comes?",
+
+      time:
+        new Date().toLocaleString()
+
+    },
+
+
+    {
+      user:
+        "Bob",
+
+      text:
+        "The WiFi is a bit slow today, is it just me?",
+
+      time:
+        new Date().toLocaleString()
+
+    },
+
+
+    {
+      user:
+        "Charlie",
+
+      text:
+        "Hello everyone! Looking for a roommate for the next month.",
+
+      time:
+        new Date().toLocaleString()
+
+    },
+
+
+    {
+      user:
+        "Diana",
+
+      text:
+        "Mess menu looks great this week! 😋",
+
+      time:
+        new Date().toLocaleString()
+
+    }
+
+  ];
+
+
+  localStorage.setItem(
+    communityKey,
+    JSON.stringify(
+      communityPosts
+    )
+  );
+
+}
+
+
+function renderCommunity() {
+
+  communityFeed.innerHTML =
+    communityPosts
+      .map(
+        p => `
+
+          <div class='community-post'>
+
+            <strong>
+              ${p.user}:
+            </strong>
+
+            ${p.text}
+
+            <div class='time'>
+              ${p.time}
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+communityPostBtn.addEventListener(
+  "click",
+  () => {
+
+    const text =
+      communityInput.value.trim();
+
+
+    if (!text) {
+
+      return;
+
+    }
+
+
+    communityPosts.push({
+
+      text,
+
+      time:
+        new Date().toLocaleString(),
+
+      user:
+        studentName
+
+    });
+
+
+    localStorage.setItem(
+      communityKey,
+      JSON.stringify(
+        communityPosts
+      )
+    );
+
+
+    communityInput.value =
+      "";
+
+
+    renderCommunity();
+
+  }
+);
+
+</script>
+
+
+<!-- =========================================================
+     AUTHENTICATION GUARD
+     ========================================================= -->
+
+<script src="auth-guard.js"></script>
+
+
+<script>
+
+  /*
+    This protects the entire
+    My Residence page.
+
+    Student only.
+  */
+
+  requireAuthentication(
+    "student"
+  );
+
+</script>
+
+
+</body>
+
+</html>

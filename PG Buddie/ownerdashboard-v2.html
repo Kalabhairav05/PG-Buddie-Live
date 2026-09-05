@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>PG-Buddie - Owner Dashboard</title>
+
+<link rel="stylesheet" href="ownerhome.css" />
+
+<style>
+/* ===== Existing animations ===== */
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+
+/* ===== Existing dashboard styling ===== */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  margin: 0;
+  color: #333;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+
+  color: #fff;
+
+  padding: 14px 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+
+  animation: fadeIn 0.6s ease forwards;
+}
+
+header nav a {
+  color: #fff;
+  margin-left: 18px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+  color: #fff;
+
+  animation: fadeInUp 0.7s ease-out;
+}
+
+
+/* ===== PG selector ===== */
+
+.pg-selector-card {
+  max-width: 1200px;
+
+  margin: 0 auto 20px;
+
+  padding: 20px;
+
+  background: #fff;
+
+  border-radius: 14px;
+
+  box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+
+  animation: fadeInUp 0.7s ease-out;
+}
+
+.pg-selector-top {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  flex-wrap: wrap;
+}
+
+.pg-selector-title {
+  margin: 0 0 5px;
+
+  font-size: 1.15rem;
+
+  color: #222;
+}
+
+.pg-selector-subtitle {
+  margin: 0;
+
+  color: #666;
+
+  font-size: 0.9rem;
+}
+
+#pgSelector {
+  min-width: 240px;
+
+  padding: 11px 14px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #333;
+
+  font-size: 0.95rem;
+
+  cursor: pointer;
+}
+
+#pgSelector:focus {
+  outline: none;
+
+  border-color: #66a6ff;
+
+  box-shadow: 0 0 0 3px rgba(102,166,255,0.15);
+}
+
+
+/* ===== Current PG information ===== */
+
+.pg-info {
+  margin-top: 15px;
+
+  padding: 14px;
+
+  border-radius: 10px;
+
+  background: rgba(102,166,255,0.08);
+}
+
+.pg-info-name {
+  font-weight: 700;
+
+  font-size: 1.1rem;
+
+  color: #0077b6;
+}
+
+.pg-info-details {
+  margin-top: 5px;
+
+  color: #555;
+
+  font-size: 0.92rem;
+}
+
+
+/* ===== Add PG button ===== */
+
+.add-pg-btn {
+  padding: 11px 18px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #66a6ff;
+
+  color: #fff;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.add-pg-btn:hover {
+  opacity: 0.9;
+
+  transform: translateY(-2px);
+}
+
+
+/* ===== Dashboard cards ===== */
+
+.dashboard {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(250px, 1fr));
+
+  gap: 18px;
+
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding: 0 16px 40px;
+}
+
+.card {
+  background: #fff;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+
+  animation: fadeInUp 0.7s ease-out;
+
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+
+  box-shadow:
+    0 18px 36px rgba(0,0,0,0.12);
+}
+
+.card h3 {
+  margin: 0 0 8px;
+
+  font-size: 1.1rem;
+
+  color: #222;
+}
+
+.card h4,
+.card h5 {
+  color: #666;
+}
+
+.status {
+  font-size: 1.5rem;
+
+  font-weight: 700;
+
+  color: #0077b6;
+
+  margin-top: 6px;
+}
+
+.toggle-btn {
+  padding: 10px 16px;
+
+  border-radius: 8px;
+
+  border: none;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  background: #66a6ff;
+
+  color: #fff;
+
+  transition:
+    background 0.25s;
+}
+
+.toggle-btn.off {
+  background: #ddd;
+
+  color: #555;
+}
+
+.toggle-btn:hover {
+  opacity: 0.9;
+}
+
+#noticeText {
+  font-size: 1.2rem;
+
+  font-weight: 700;
+
+  color: #222;
+}
+
+
+/* ===== Add PG modal ===== */
+
+.pg-modal {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  background: rgba(0,0,0,0.45);
+
+  padding: 20px;
+
+  overflow-y: auto;
+}
+
+.pg-modal.show {
+  display: flex;
+
+  align-items: flex-start;
+
+  justify-content: center;
+}
+
+.pg-modal-content {
+  width: min(650px, 100%);
+
+  margin: 30px auto;
+
+  padding: 25px;
+
+  background: #fff;
+
+  border-radius: 14px;
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.pg-modal-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.pg-modal-header h2 {
+  margin: 0;
+
+  color: #222;
+}
+
+.close-pg-modal {
+  border: none;
+
+  background: transparent;
+
+  font-size: 28px;
+
+  cursor: pointer;
+
+  color: #555;
+}
+
+.pg-form-group {
+  margin-bottom: 15px;
+}
+
+.pg-form-group label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  font-weight: 600;
+
+  color: #333;
+}
+
+.pg-form-group input,
+.pg-form-group textarea,
+.pg-form-group select {
+  width: 100%;
+
+  padding: 11px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  font-family: inherit;
+
+  box-sizing: border-box;
+}
+
+.pg-form-group textarea {
+  resize: vertical;
+}
+
+.pg-form-row {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 15px;
+}
+
+.pg-modal-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  margin-top: 20px;
+}
+
+.pg-cancel-btn,
+.pg-submit-btn {
+  padding: 11px 18px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.pg-cancel-btn {
+  background: #eee;
+
+  color: #555;
+}
+
+.pg-submit-btn {
+  background: #66a6ff;
+
+  color: #fff;
+}
+
+.pg-submit-btn:hover,
+.pg-cancel-btn:hover {
+  opacity: 0.9;
+}
+
+#pgFormMessage {
+  margin-top: 10px;
+
+  font-weight: 600;
+}
+
+
+/* ===== Mobile ===== */
+
+@media (max-width: 650px) {
+
+  header {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .pg-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .pg-selector-top {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  #pgSelector {
+    width: 100%;
+  }
+
+  .add-pg-btn {
+    width: 100%;
+  }
+
+  .pg-modal-content {
+    padding: 18px;
+
+    margin: 10px auto;
+  }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- ================================
+     HEADER
+================================= -->
+
+<header>
+
+  <div
+    class="logo"
+    style="font-size:1.4rem;font-weight:700;"
+  >
+    PG-Buddie
+  </div>
+
+  <nav>
+
+    <a href="hybridwelcomepage.html">
+      Home
+    </a>
+
+    <a href="#" id="complaintsLink">
+      Complaints
+    </a>
+
+    <a href="ownerprofile.html">
+      Profile
+    </a>
+
+    <a href="#" id="logoutBtn">
+      Logout
+    </a>
+
+  </nav>
+
+</header>
+
+
+<!-- ================================
+     TITLE
+================================= -->
+
+<h1>
+  Owner Dashboard
+</h1>
+
+<p
+  style="
+    text-align:center;
+    color:#fff;
+    font-size:1.1rem;
+  "
+>
+  👋 Welcome,
+  <span id="ownerNameText">
+    Owner
+  </span>
+</p>
+
+
+<!-- ================================
+     PG SELECTOR
+================================= -->
+
+<section class="pg-selector-card">
+
+  <div class="pg-selector-top">
+
+    <div>
+
+      <h2 class="pg-selector-title">
+        Your PG
+      </h2>
+
+      <p class="pg-selector-subtitle">
+        Select the PG whose dashboard
+        statistics you want to view.
+      </p>
+
+    </div>
+
+
+    <select id="pgSelector">
+
+      <option value="">
+        Loading your PGs...
+      </option>
+
+    </select>
+
+
+    <button
+      type="button"
+      class="add-pg-btn"
+      id="addPgBtn"
+    >
+      + Add New PG
+    </button>
+
+  </div>
+
+
+  <div
+    class="pg-info"
+    id="selectedPGInfo"
+  >
+
+    <div
+      class="pg-info-name"
+      id="selectedPGName"
+    >
+      No PG selected
+    </div>
+
+    <div
+      class="pg-info-details"
+      id="selectedPGDetails"
+    >
+      Add a PG to start managing
+      your property.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================================
+     DASHBOARD
+================================= -->
+
+<section class="dashboard">
+
+
+  <!-- Students -->
+
+  <div
+    class="card"
+    id="studentsCard"
+  >
+
+    <h3>
+      Students Residing
+    </h3>
+
+    <div
+      class="status"
+      id="studentCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <!-- Capacity -->
+
+  <div class="card">
+
+    <h3>
+      Total Capacity
+    </h3>
+
+    <div
+      class="status"
+      id="capacityCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <!-- Available Beds -->
+
+  <div class="card">
+
+    <h3>
+      Available Beds
+    </h3>
+
+    <div
+      class="status"
+      id="availableBedsCount"
+    >
+      0
+    </div>
+
+  </div>
+
+
+  <!-- Occupancy -->
+
+  <div class="card">
+
+    <h3>
+      Occupancy
+    </h3>
+
+    <div
+      class="status"
+      id="occupancyCount"
+    >
+      0%
+    </div>
+
+  </div>
+
+
+  <!-- Water -->
+
+  <div class="card">
+
+    <h3>
+      Water Supply
+    </h3>
+
+    <h5>
+      enable or disable water status
+    </h5>
+
+    <button
+      class="toggle-btn"
+      id="toggleWater"
+    >
+      Turn Off
+    </button>
+
+  </div>
+
+
+  <!-- Power -->
+
+  <div class="card">
+
+    <h3>
+      Power Supply
+    </h3>
+
+    <h5>
+      enable or disable power status
+    </h5>
+
+    <button
+      class="toggle-btn"
+      id="togglePower"
+    >
+      Turn Off
+    </button>
+
+  </div>
+
+
+  <!-- Mess -->
+
+  <div class="card">
+
+    <h3>
+      Mess Service
+    </h3>
+
+    <h4 id="messBookingText">
+      0 students booked
+    </h4>
+
+    <button
+      class="toggle-btn"
+      id="toggleMess"
+    >
+      Turn Off
+    </button>
+
+  </div>
+
+
+  <!-- Complaints -->
+
+  <div class="card">
+
+    <h3>
+      Complaints
+    </h3>
+
+    <div
+      class="status"
+      id="complaintsCount"
+    >
+      0
+    </div>
+
+    <button
+      class="toggle-btn"
+      id="viewComplaints"
+    >
+      View Complaints
+    </button>
+
+  </div>
+
+
+  <!-- Expenditure -->
+
+  <div class="card">
+
+    <h3>
+      This Month Expenditure
+    </h3>
+
+    <div
+      class="status"
+      id="expenditure"
+    >
+      ₹0
+    </div>
+
+  </div>
+
+
+  <!-- Check-in Requests -->
+
+  <div
+    class="card"
+    id="checkinCard"
+  >
+
+    <h3>
+      New Requests
+    </h3>
+
+    <h4 id="checkinRequestText">
+      0 requests for check-in
+    </h4>
+
+  </div>
+
+
+  <!-- Latest Notice -->
+
+  <div class="card">
+
+    <h3>
+      Latest Notice
+    </h3>
+
+    <p id="noticeText">
+      No notices yet.
+    </p>
+
+    <button
+      class="toggle-btn"
+      id="addNoticeBtn"
+    >
+      Post Notice
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================
+     ADD PG MODAL
+====================================== -->
+
+<div
+  class="pg-modal"
+  id="pgModal"
+>
+
+  <div class="pg-modal-content">
+
+
+    <div class="pg-modal-header">
+
+      <h2>
+        Add New PG
+      </h2>
+
+      <button
+        type="button"
+        class="close-pg-modal"
+        id="closePgModal"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <form id="pgForm">
+
+
+      <div class="pg-form-group">
+
+        <label for="pgName">
+          PG Name
+        </label>
+
+        <input
+          type="text"
+          id="pgName"
+          placeholder="e.g. Sri Sai PG"
+          required
+        />
+
+      </div>
+
+
+      <div class="pg-form-group">
+
+        <label for="pgAddress">
+          Address
+        </label>
+
+        <textarea
+          id="pgAddress"
+          rows="3"
+          placeholder="Full PG address"
+          required
+        ></textarea>
+
+      </div>
+
+
+      <div class="pg-form-row">
+
+        <div class="pg-form-group">
+
+          <label for="pgTotalRooms">
+            Total Rooms
+          </label>
+
+          <input
+            type="number"
+            id="pgTotalRooms"
+            min="0"
+            value="0"
+          />
+
+        </div>
+
+
+        <div class="pg-form-group">
+
+          <label for="pgCapacity">
+            Total Capacity
+          </label>
+
+          <input
+            type="number"
+            id="pgCapacity"
+            min="0"
+            value="0"
+            required
+          />
+
+        </div>
+
+      </div>
+
+
+      <div class="pg-form-group">
+
+        <label for="pgAmenities">
+          Amenities
+        </label>
+
+        <input
+          type="text"
+          id="pgAmenities"
+          placeholder="WiFi, Food, Laundry, Parking"
+        />
+
+      </div>
+
+
+      <div class="pg-form-row">
+
+        <div class="pg-form-group">
+
+          <label for="pgLatitude">
+            Latitude
+          </label>
+
+          <input
+            type="number"
+            id="pgLatitude"
+            step="any"
+            placeholder="Optional"
+          />
+
+        </div>
+
+
+        <div class="pg-form-group">
+
+          <label for="pgLongitude">
+            Longitude
+          </label>
+
+          <input
+            type="number"
+            id="pgLongitude"
+            step="any"
+            placeholder="Optional"
+          />
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="pgFormMessage"
+      ></div>
+
+
+      <div class="pg-modal-actions">
+
+        <button
+          type="button"
+          class="pg-cancel-btn"
+          id="cancelPgBtn"
+        >
+          Cancel
+        </button>
+
+
+        <button
+          type="submit"
+          class="pg-submit-btn"
+        >
+          Add PG
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- ================================
+     EXISTING JAVASCRIPT
+================================= -->
+
+<script src="owner.js"></script>
+
+</body>
+</html>

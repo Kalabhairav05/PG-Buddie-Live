@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Residents - PG Buddie</title>
+<style>
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  color: #333;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+header .logo { font-weight: bold; font-size: 1.5rem; }
+header nav a {
+  color: #fff; text-decoration: none; margin-left: 1.5rem; font-weight: 500;
+}
+header nav a:hover { text-decoration: underline; }
+
+main {
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  color: #fff;
+  margin-bottom: 25px;
+}
+
+.residents-list {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  0% {opacity: 0; transform: translateY(30px);}
+  100% {opacity: 1; transform: translateY(0);}
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+th {
+  background: #f5f8ff;
+  color: #0077b6;
+  font-weight: 600;
+}
+tr:hover {
+  background: #f9fbff;
+  transform: scale(1.01);
+  transition: 0.2s;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PG Buddie</div>
+  <nav>
+    <a href="ownerdashboard.html">Dashboard</a>
+    <a href="profile.html">Profile</a>
+    <a href="#" id="logoutBtn">Logout</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Students Residing 🏠</h2>
+  <div class="residents-list">
+    <table>
+      <thead>
+        <tr>
+          <th>Full Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Native</th>
+          <th>Room No.</th>
+        </tr>
+      </thead>
+      <tbody id="residentsTable">
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+const residents = [
+  { name: 'Aarav Mehta', email: 'aarav.mehta@gmail.com', phone: '9876543211', native: 'Delhi', room: '101' },
+  { name: 'Priya Nair', email: 'priya.nair@gmail.com', phone: '9876543212', native: 'Kochi', room: '102' },
+  { name: 'Rohan Das', email: 'rohan.das@gmail.com', phone: '9876543213', native: 'Kolkata', room: '103' },
+  { name: 'Neha Singh', email: 'neha.singh@gmail.com', phone: '9876543214', native: 'Lucknow', room: '104' },
+  { name: 'Aditya Rao', email: 'aditya.rao@gmail.com', phone: '9876543215', native: 'Hyderabad', room: '105' },
+];
+
+const table = document.getElementById('residentsTable');
+residents.forEach(r => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${r.name}</td>
+    <td>${r.email}</td>
+    <td>${r.phone}</td>
+    <td>${r.native}</td>
+    <td>${r.room}</td>
+  `;
+  table.appendChild(tr);
+});
+
+document.getElementById('logoutBtn').addEventListener('click', e => {
+  e.preventDefault();
+  localStorage.clear();
+  window.location.href = 'login.html';
+});
+</script>
+
+</body>
+</html>

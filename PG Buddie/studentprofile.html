@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PG Finder - Profile</title>
+  <style>
+    @keyframes fadeInUp {0%{opacity:0;transform:translateY(30px);}100%{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn {0%{opacity:0;}100%{opacity:1;} }
+
+    body {
+      font-family:'Segoe UI',sans-serif;
+      background:linear-gradient(120deg,#89f7fe,#66a6ff);
+      color:#333;margin:0;
+      scroll-behavior:smooth;
+    }
+
+    header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: fadeIn 0.8s ease-in-out forwards;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(120deg, #89f7fe, #66a6ff);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 25px;
+}
+
+header .logo {
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+nav a {
+  margin-left: 18px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #fff;
+  transition: all 0.3s ease;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 4px;
+}
+
+nav a:hover {
+  color: #f1faff;
+  border-bottom: 2px solid #fff;
+}
+
+
+    .profile-container {
+      max-width:650px;
+      background:#fff;
+      margin:60px auto;
+      padding:30px 28px;
+      border-radius:14px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.06);
+      animation:fadeInUp 0.8s ease-out forwards;
+    }
+
+    .profile-container h2 {
+      text-align:center;
+      margin-bottom:20px;
+      color:#222;
+      font-size:1.5rem;
+    }
+
+    .details-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    .details-grid div {
+      display:flex;
+      flex-direction:column;
+    }
+
+    label {
+      font-weight:600;
+      color:#444;
+      margin-bottom:4px;
+    }
+    input {
+      padding:10px 12px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      outline:none;
+      background:#f7f9fc;
+      transition:all 0.2s;
+    }
+    input:focus {
+      border-color:#66a6ff;
+      background:#fff;
+      box-shadow:0 4px 14px rgba(102,166,255,0.12);
+    }
+    input[readonly] {
+      border-color:transparent;
+      background:#f9fbff;
+      color:#555;
+      cursor:default;
+    }
+
+    .btn-bar {
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .btn {
+      padding:10px 16px;
+      border-radius:10px;
+      font-weight:700;
+      cursor:pointer;
+      border:none;
+      transition:all 0.2s;
+    }
+    .btn.primary { background:#66a6ff; color:#fff; }
+    .btn.secondary { background:#fff; border:2px solid #66a6ff; color:#66a6ff; }
+    .btn:hover { opacity:0.9; }
+
+    .success {
+      background:#e8fff9;
+      color:#066e57;
+      border:1px solid #b7f0da;
+      padding:10px;
+      border-radius:8px;
+      margin-top:16px;
+      text-align:center;
+      display:none;
+      font-weight:600;
+    }
+
+    @media(max-width:600px){
+      .details-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">PG Finder</div>
+  <nav>
+    <a href="studenthome.html">Home</a>
+    <a href="#">Bookings</a>
+    <a href="myresidence.html" >Residence</a>
+    
+    <a href="#" id="communityLink">Community</a>
+    <a href="login.html">Logout</a>
+  </nav>
+</header>
+
+<section class="profile-container">
+  <h2>My Profile</h2>
+
+  <div class="details-grid">
+    <div>
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" readonly />
+    </div>
+    <div>
+      <label for="email">Email</label>
+      <input type="email" id="email" readonly />
+    </div>
+    <div>
+      <label for="studentPhone">Student Phone</label>
+      <input type="tel" id="studentPhone" readonly />
+    </div>
+    <div>
+      <label for="parentPhone">Parent Phone</label>
+      <input type="tel" id="parentPhone" readonly />
+    </div>
+    <div>
+      <label for="age">Age</label>
+      <input type="number" id="age" readonly />
+    </div>
+    <div>
+      <label for="university">University</label>
+      <input type="text" id="university" readonly />
+    </div>
+    <div>
+      <label for="native">Native</label>
+      <input type="text" id="native" readonly />
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" readonly />
+    </div>
+  </div>
+
+  <div class="btn-bar">
+    <button class="btn secondary" id="editBtn">Edit</button>
+    <button class="btn primary" id="saveBtn" style="display:none;">Save</button>
+  </div>
+
+  <div class="success" id="saveMsg">Profile updated successfully!</div>
+</section>
+
+<script>
+  const fields = ["fullName","email","studentPhone","parentPhone","age","university","native","password"];
+  const data = JSON.parse(localStorage.getItem("studentProfile") || "{}");
+  const emailFromLogin = localStorage.getItem("studentEmail") || "";
+
+  // Auto fill defaults
+  document.getElementById("fullName").value = data.fullName || (emailFromLogin ? emailFromLogin.split("@")[0].replace(/\d/g,'').replace(/\./g,' ').replace(/\b\w/g,c=>c.toUpperCase()).trim() : "");
+  document.getElementById("email").value = data.email || emailFromLogin;
+  document.getElementById("studentPhone").value = data.studentPhone || "";
+  document.getElementById("parentPhone").value = data.parentPhone || "";
+  document.getElementById("age").value = data.age || "";
+  document.getElementById("university").value = data.university || "";
+  document.getElementById("native").value = data.native || "";
+  document.getElementById("password").value = data.password || "";
+
+  const editBtn = document.getElementById("editBtn");
+  const saveBtn = document.getElementById("saveBtn");
+  const saveMsg = document.getElementById("saveMsg");
+
+  editBtn.addEventListener("click",()=>{
+    fields.forEach(f => document.getElementById(f).removeAttribute("readonly"));
+    editBtn.style.display="none";
+    saveBtn.style.display="inline-block";
+  });
+
+  saveBtn.addEventListener("click",()=>{
+    const updated = {};
+    fields.forEach(f => {
+      updated[f] = document.getElementById(f).value.trim();
+      document.getElementById(f).setAttribute("readonly",true);
+    });
+    localStorage.setItem("studentProfile",JSON.stringify(updated));
+    saveBtn.style.display="none";
+    editBtn.style.display="inline-block";
+    saveMsg.style.display="block";
+    setTimeout(()=>saveMsg.style.display="none",1500);
+  });
+
+  // Smooth nav consistency
+  document.getElementById("residenceLink").addEventListener("click",()=>window.location.href="studenthome.html#residenceSection");
+  document.getElementById("communityLink").addEventListener("click",()=>window.location.href="studenthome.html#communityCard");
+  document.getElementById("complaintLink").addEventListener("click",()=>{
+    window.location.href="studenthome.html";
+    setTimeout(()=>localStorage.setItem("openComplaint","true"),200);
+  });
+</script>
+
+</body>
+</html>

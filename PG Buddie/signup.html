@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PG Finder Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <!-- Slider for selecting role -->
+    <div class="slider">
+      <div class="option active" id="studentBtn">Student</div>
+      <div class="option" id="ownerBtn">Owner</div>
+      <div class="indicator"></div>
+    </div>
+
+    <!-- Sign Up Form -->
+    <form id="signupForm">
+      <h2 id="formTitle">Student Sign Up</h2>
+
+      <!-- Common Fields -->
+      <input type="text" id="fullName" name="name" placeholder="Full Name" autocomplete="name" required>
+      <input type="email" id="email" name="email" placeholder="Email" autocomplete="email" required>
+      <input type="password" id="password" name="password" placeholder="Password" autocomplete="new-password" minlength="8" required>
+      <input type="tel" id="phone" name="phone" placeholder="Phone Number" autocomplete="tel" required>
+
+      <!-- Student-only field -->
+      <div id="studentFields">
+        <input type="text" id="college" name="college" placeholder="University / College" autocomplete="organization" required>
+      </div>
+
+      <!-- Owner gets no PG details during account creation -->
+      <div id="ownerFields" style="display:none;"></div>
+
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <p class="signup-link">
+      Already have an account? <a href="login.html">Login</a>
+    </p>
+  </div>
+
+  <script src="signup.js"></script>
+</body>
+</html>

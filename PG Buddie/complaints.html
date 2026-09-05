@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Owner Complaints | PG-Buddie</title>
+
+<link rel="stylesheet" href="ownerhome.css" />
+<style>
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(120deg,#89f7fe,#66a6ff);margin:0;color:#333;}
+header{padding:14px 20px;background:linear-gradient(120deg,#89f7fe,#66a6ff);color:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 3px 10px rgba(0,0,0,0.1);}
+header a{color:#fff;text-decoration:none;margin-left:16px;font-weight:600;}
+h1{text-align:center;margin:20px 0;color:#fff;}
+section{max-width:900px;margin:0 auto;background:#fff;border-radius:14px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,0.1);}
+.category{margin-bottom:18px;}
+.category h2{font-size:1.2rem;color:#0077b6;border-bottom:2px solid #66a6ff;padding-bottom:4px;margin-bottom:10px;}
+.complaint-item{padding:10px;border-radius:8px;background:#f1f3f8;margin-bottom:10px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;transition:all 0.3s ease;}
+.complaint-item strong{color:#222;}
+.complaint-item .meta{font-size:0.9rem;color:#666;margin-top:4px;}
+.btn-group{display:flex;gap:8px;margin-top:6px;}
+.action-btn{background:#66a6ff;border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:600;transition:background 0.2s;}
+.action-btn:hover{background:#0077b6;}
+.acknowledged{background:#d0f8d0 !important;}
+.resolved{background:#e0ffe0 !important;opacity:0.8;}
+.resolved strong{text-decoration:line-through;color:#4CAF50;}
+.action-btn:disabled{opacity:0.7;cursor:not-allowed;}
+.back-btn{display:inline-block;margin-top:20px;padding:10px 16px;background:#0077b6;color:#fff;border:none;border-radius:8px;text-decoration:none;font-weight:600;}
+.back-btn:hover{opacity:0.9;}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">PG-Buddie</div>
+  <nav><a href="ownerdashboard.html">Dashboard</a>
+    <a href="ownerprofile.html">Profile</a>
+      <a href="notices.html">Notices</a>
+     <a href="login.html">Logout</a>
+
+  </nav>
+
+
+</header>
+<h1>Complaints Overview</h1>
+
+<section id="complaintsSection"></section>
+
+<script>
+// --- Mock complaint data ---
+const complaintsData = {
+  Water: [
+    { name: "Amit Kumar", room: "A-101", detail: "No water in bathroom since morning" },
+    { name: "Neha Verma", room: "A-103", detail: "Water pressure too low" }
+  ],
+  Power: [
+    { name: "Ravi Singh", room: "B-202", detail: "Frequent power cuts at night" }
+  ],
+  Mess: [
+    { name: "Priya Sharma", room: "C-110", detail: "Mess food too oily" }
+  ],
+  Cleanliness: [
+    { name: "Vikram Rao", room: "B-104", detail: "Hallway not cleaned regularly" }
+  ]
+};
+
+const container = document.getElementById("complaintsSection");
+
+for (const category in complaintsData) {
+  const div = document.createElement("div");
+  div.className = "category";
+  div.innerHTML = `<h2>${category} Issues</h2>`;
+
+  complaintsData[category].forEach((c) => {
+    const item = document.createElement("div");
+    item.className = "complaint-item";
+    item.innerHTML = `
+      <div>
+        <strong>${c.detail}</strong>
+        <div class="meta">👤 ${c.name} — Room ${c.room}</div>
+      </div>
+      <div class="btn-group">
+        <button class="action-btn ack-btn">Acknowledge</button>
+        <button class="action-btn complete-btn">Mark as Completed</button>
+      </div>
+    `;
+
+    // --- button logic ---
+    const ackBtn = item.querySelector(".ack-btn");
+    const completeBtn = item.querySelector(".complete-btn");
+
+    ackBtn.addEventListener("click", () => {
+      item.classList.add("acknowledged");
+      ackBtn.disabled = true;
+      ackBtn.textContent = "Acknowledged";
+      ackBtn.style.background = "#4CAF50";
+    });
+
+    completeBtn.addEventListener("click", () => {
+      item.classList.add("resolved");
+      completeBtn.disabled = true;
+      completeBtn.textContent = "Completed";
+      completeBtn.style.background = "#4CAF50";
+    });
+
+    div.appendChild(item);
+  });
+
+  container.appendChild(div);
+}
+
+const backBtn = document.createElement("a");
+backBtn.textContent = "← Back to Dashboard";
+backBtn.href = "ownerdashboard.html";
+backBtn.className = "back-btn";
+container.appendChild(backBtn);
+</script>
+</body>
+</html>
